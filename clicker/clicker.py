@@ -12,19 +12,16 @@ import typer
 # I don't need a failsafe for this script.
 pyautogui.FAILSAFE = False
 
-# Flag to print debug statements to console.
-_PRINT_DEBUG = False
 
-
-def auto_click(fast_click: Optional[bool]) -> None:
+def auto_click(
+    fast_click: Optional[bool] = None, print_debug: Optional[bool] = None
+) -> None:
     """Click function will pause current thread for a random intervaul, then click the mouse."""
     # get a time between 1 second and 3 minutes
     # to make clicks look a little more 'natural'
-    global _PRINT_DEBUG
-
     sleep_time = 1 if fast_click else randint(1, 180)
 
-    if _PRINT_DEBUG and not fast_click:
+    if print_debug and not fast_click:
         print(f"Random thread sleep for {sleep_time} seconds.")
 
     # pause the current thread
@@ -33,40 +30,39 @@ def auto_click(fast_click: Optional[bool]) -> None:
     # it's that easy to click a mouse with python :)
     pyautogui.click()
 
-    if _PRINT_DEBUG:
+    if print_debug:
         print("Clicked")
 
 
 def main(
-    debug: bool = typer.Option(None, "--debug", "-d"),
-    fast_click: bool = typer.Option(None, "--fast-click", "-f"),
+    debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
+    fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
 ) -> None:
     """Auto Mouse Clicker Script. Make it look like your still online with Python Automation." """
     print("Running clicker. Enter ctrl+c to stop.")
 
-    global _PRINT_DEBUG
-    _PRINT_DEBUG = debug
-
-    if _PRINT_DEBUG and fast_click:
+    if debug and fast_click:
         print(
             "fast_click flag passed in. Using thread.sleep(1), instead of a random interval."
         )
 
     while True:
         try:
-            auto_click(fast_click)
+            auto_click(fast_click, debug)
         except KeyboardInterrupt:
             msg = (
                 "KeyboardInterrupt thrown and caught. Exiting script"
-                if _PRINT_DEBUG
+                if debug
                 else "Back to work!"
             )
             print(f"\n{msg}")
             break
 
+
 def run() -> None:
     """Common entry point."""
     typer.run(main)
+
 
 if __name__ == "__main__":
     run()
