@@ -1,7 +1,5 @@
-from .clicker import main
-
-import typer
+from .clicker import run
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    run()
