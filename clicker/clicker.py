@@ -19,6 +19,8 @@ def auto_click(sleep_time: int = None) -> None:
     """Click function will pause current thread for a random intervaul, then click the mouse."""
     # get a time between 1 second and 3 minutes
     # to make clicks look a little more 'natural'
+    global _PRINT_DEBUG
+
     if not sleep_time:
         sleep_time = randint(1, 180)
 
@@ -44,15 +46,17 @@ def main(
     """Auto Mouse Clicker Script. Make it look like your still online with Python Automation." """
     print("Running clicker. Enter ctrl+c to stop.")
 
+    global _PRINT_DEBUG
     _PRINT_DEBUG = debug
+
+    thread_sleep = 1 if fast_click else None
+    if _PRINT_DEBUG and fast_click:
+        print(
+            "fast_click flag passed in. Using thread.sleep(1), instead of a random interval."
+        )
+
     while True:
         try:
-            thread_sleep = 1 if fast_click else None
-            if _PRINT_DEBUG and fast_click:
-                print(
-                    "fast_click flag passed in. Using thread.sleep(1), instead of a random interval."
-                )
-
             auto_click(thread_sleep)
         except KeyboardInterrupt:
             msg = (
