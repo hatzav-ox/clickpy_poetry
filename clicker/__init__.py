@@ -1,1 +1,1 @@
-from .clicker import main
+from .clicker import run

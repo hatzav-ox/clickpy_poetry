@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-from clicker import main
+from clicker import run
 
-import typer
 
 if __name__ == "__main__":
-    typer.run(main)
+    run()

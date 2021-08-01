@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Auto Mouse Clicker Script. Make it look like your still online with Python Automation."""
 
 from time import sleep
@@ -65,6 +63,9 @@ def main(
             print(f"\n{msg}")
             break
 
+def run() -> None:
+    """Common entry point."""
+    typer.run(main)
 
 if __name__ == "__main__":
-    typer.run(main)
+    run()
