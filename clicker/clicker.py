@@ -24,7 +24,7 @@ def auto_click(sleep_time: int = None) -> None:
 
     if _PRINT_DEBUG:
         print(
-            f"Random thread sleep for: {sleep_time} {'seconds' if sleep_time > 1 else 'second0'}."
+            f"Random thread sleep for {sleep_time} {'seconds' if sleep_time > 1 else 'second'}."
         )
 
     # pause the current thread
