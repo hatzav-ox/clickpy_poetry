@@ -53,8 +53,6 @@ pipenv run tests # run pytest and generate report
 pipenv run cover # translate report to html and display it
 ```
 
-Once both commands have run successfully, open folder `htmlcov` and open `index.html` to see a full breakdown. You can click on the file names and it will navigate you to a fully detailed, line-by-line code review.
-
 
 [1]: https://github.com/pypa/pipenv
 [2]: https://github.com/pyenv/pyenv
