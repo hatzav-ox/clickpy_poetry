@@ -23,7 +23,7 @@ click = "./click"
 test = "pytest -v --cov=clicker --capture=sys tests/"
 tests = "pytest -v --cov=clicker --capture=sys tests/"
 clean = "rm -rf htmlcov/ .coverage .pytest_cache clicker/__pycache__/ test/__pycache__"
-cover = "coverage.sh"
+cover = "bash coverage.sh"
 
 [pipenv]
 allow_prereleases = true
