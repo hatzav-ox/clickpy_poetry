@@ -10,12 +10,19 @@ typer = "*"
 [dev-packages]
 pylint = "*"
 black = "*"
+pytest = "*"
+pytest-mock = "*"
+coverage = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"
 
 [scripts]
 click = "./click"
+tests = "pytest -v --cov=clicker tests/"
+clean = "rm -rf htmlcov/ .coverage .pytest_cache clicker/__pycache__/ test/__pycache__"
+htmlcov = "coverage html"
 
 [pipenv]
 allow_prereleases = true
