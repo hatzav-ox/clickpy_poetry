@@ -1,4 +1,5 @@
 # clicker
+
 Automated mouse clicker using python
 
 ## Dependencies
@@ -36,8 +37,6 @@ With this style, you can specifiy exactly which interperter you want to run this
 
 The last way you can run this script is with a standard call with python: `$ python clicker/clicker.py`
 
-
-
 ## Testing
 
 This project utilizes [pytest](5) and [pytest-mock](6). Both should be included in `Pipfile`, and `.vscode/settings.json` should already be setup to use these libraries.
@@ -52,7 +51,6 @@ To generate a code coverage report, enter the following commands:
 pipenv run tests # run pytest and generate report
 pipenv run cover # translate report to html and display it
 ```
-
 
 [1]: https://github.com/pypa/pipenv
 [2]: https://github.com/pyenv/pyenv
