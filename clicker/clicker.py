@@ -34,7 +34,7 @@ def auto_click(
         print("Clicked")
 
 
-def main(
+def _main(
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
     fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
 ) -> None:
@@ -48,7 +48,7 @@ def main(
 
     while True:
         try:
-            auto_click(fast_click, debug)
+            auto_click(fast_click=fast_click, print_debug=debug)
         except KeyboardInterrupt:
             msg = (
                 "KeyboardInterrupt thrown and caught. Exiting script"
@@ -59,10 +59,12 @@ def main(
             break
 
 
-def run() -> None:
+# Just a wrapper around main method.
+# I'm going to assume Typer.run is tested already.
+def run() -> None:  # pragma: no cover
     """Common entry point."""
-    typer.run(main)
+    typer.run(_main)  # pragma: no cover
 
 
-if __name__ == "__main__":
-    run()
+if __name__ == "__main__":  # pragma: no cover
+    run()  # pragma: no cover
