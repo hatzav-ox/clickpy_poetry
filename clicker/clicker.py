@@ -59,11 +59,9 @@ def _main(
             break
 
 
-# Just a wrapper around main method.
-# I'm going to assume Typer.run is tested already.
-def run() -> None:  # pragma: no cover
-    """Common entry point."""
-    typer.run(_main)  # pragma: no cover
+def run() -> None:
+    """Common entry point. A wrapper around main function, that setups typer and executes main(...)."""
+    typer.run(_main)
 
 
 if __name__ == "__main__":  # pragma: no cover
