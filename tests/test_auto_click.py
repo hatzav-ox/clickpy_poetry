@@ -1,7 +1,7 @@
 import clicker
-
-from pytest_mock import MockerFixture
 from pytest import CaptureFixture
+from pytest_mock import MockerFixture
+
 
 # using pytest-mock for easier function mocking
 def test_click_works(mocker: MockerFixture) -> None:

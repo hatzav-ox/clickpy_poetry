@@ -1,5 +1,4 @@
 import clicker
-
 from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 

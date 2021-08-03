@@ -1,12 +1,11 @@
 """Auto Mouse Clicker Script. Make it look like your still online with Python Automation."""
 
-from typing import Optional
-from time import sleep
 from random import randint
+from time import sleep
+from typing import Optional
 
 import pyautogui
 import typer
-
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.

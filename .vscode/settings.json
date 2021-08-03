@@ -2,10 +2,14 @@
     "python.testing.pytestEnabled": true,
     "python.linting.pylintEnabled": true,
     "python.formatting.provider": "black",
+    "python.linting.enabled": true,
     "editor.formatOnSave": true,
     "python.testing.pytestArgs": [
         "tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.nosetestsEnabled": false
+    "python.testing.nosetestsEnabled": false,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true,
+    }
 }
