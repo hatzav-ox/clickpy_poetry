@@ -29,7 +29,7 @@ This style is the easiest to execute and type, but you can directly tell which p
 
 ### Second Approach: Python Module
 
-With the addition of the `__main__.py` file in the clicker dir, this script can be ran via python modules statement: `$ python -m clicker`.
+With the addition of the `__main__.py` file in the clicker directory, this script can be ran via python modules statement: `$ python -m clicker`.
 
 With this style, you can specifiy exactly which interperter you want to run this script with. This is very handy if you have multiple versions installed.
 
