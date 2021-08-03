@@ -11,7 +11,7 @@ def test_click_works(mocker: MockerFixture) -> None:
     mocked_gui_click = mocker.patch("clicker.clicker.pyautogui.click")
 
     # Act
-    clicker.clicker.auto_click()
+    clicker.auto_click()
 
     # Assert
     mocked_randint.assert_called_once()
@@ -26,7 +26,7 @@ def test_fast_click_bypasses_randint(mocker: MockerFixture) -> None:
     mocked_gui_click = mocker.patch("clicker.clicker.pyautogui.click")
 
     # Act
-    clicker.clicker.auto_click(fast_click=True)
+    clicker.auto_click(fast_click=True)
 
     # Assert
     mocked_randint.assert_not_called()
@@ -43,7 +43,7 @@ def test_print_debug_in_auto_click(
     mocked_gui_click = mocker.patch("clicker.clicker.pyautogui.click")
 
     # Act
-    clicker.clicker.auto_click(print_debug=True)
+    clicker.auto_click(print_debug=True)
 
     # Assert
     out, err = capsys.readouterr()
@@ -66,7 +66,7 @@ def test_print_debug_and_fast_click_in_auto_click(
     mocked_gui_click = mocker.patch("clicker.clicker.pyautogui.click")
 
     # Act
-    clicker.clicker.auto_click(fast_click=True, print_debug=True)
+    clicker.auto_click(fast_click=True, print_debug=True)
 
     # Assert
     out, err = capsys.readouterr()
