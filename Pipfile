@@ -9,14 +9,17 @@ typer = "*"
 
 [dev-packages]
 pylint = "*"
-black = "*"
 pytest = "*"
 pytest-mock = "*"
-coverage = "*"
 pytest-cov = "*"
+coverage = "*"
+black = "*"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
 
 [scripts]
 click = "./click"
@@ -24,6 +27,3 @@ test = "pytest -v --cov=clicker --capture=sys tests/"
 tests = "pytest -v --cov=clicker --capture=sys tests/"
 clean = "rm -rf htmlcov/ .coverage .pytest_cache clicker/__pycache__/ test/__pycache__"
 cover = "bash coverage.sh"
-
-[pipenv]
-allow_prereleases = true
