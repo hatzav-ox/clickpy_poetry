@@ -13,18 +13,18 @@ pyautogui.FAILSAFE = False
 
 
 def auto_click(
-    fast_click: Optional[bool] = None, print_debug: Optional[bool] = None
+    sleep_time: Optional[int] = None, print_debug: Optional[bool] = None
 ) -> None:
     """Click function will pause current thread for a random intervaul, then click the mouse."""
     # get a time between 1 second and 3 minutes
     # to make clicks look a little more 'natural'
-    sleep_time = 1 if fast_click else randint(1, 180)
+    timer = sleep_time if sleep_time else randint(1, 180)
 
-    if print_debug and not fast_click:
-        print(f"Random thread sleep for {sleep_time} seconds.")
+    if print_debug:
+        print(f"Random thread sleep for {timer} seconds.")
 
     # pause the current thread
-    sleep(sleep_time)
+    sleep(timer)
 
     # it's that easy to click a mouse with python :)
     pyautogui.click()
@@ -47,7 +47,8 @@ def _main(
 
     while True:
         try:
-            auto_click(fast_click=fast_click, print_debug=debug)
+            sleep_time = 1 if fast_click else None
+            auto_click(sleep_time=sleep_time, print_debug=debug)
         except KeyboardInterrupt:
             msg = (
                 "KeyboardInterrupt thrown and caught. Exiting script"

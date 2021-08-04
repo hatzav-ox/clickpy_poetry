@@ -14,7 +14,7 @@ def test_main_no_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(fast_click=None, print_debug=None)
+    mock_clickpy.assert_called_once_with(sleep_time=None, print_debug=None)
     assert call == "Running clickpy. Enter ctrl+c to stop.\n\nBack to work!\n"
     assert err == ""
 
@@ -30,7 +30,7 @@ def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(fast_click=True, print_debug=None)
+    mock_clickpy.assert_called_once_with(sleep_time=1, print_debug=None)
     assert call == "Running clickpy. Enter ctrl+c to stop.\n\nBack to work!\n"
     assert err == ""
 
@@ -46,7 +46,7 @@ def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) 
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(fast_click=False, print_debug=True)
+    mock_clickpy.assert_called_once_with(sleep_time=None, print_debug=True)
     assert (
         call
         == "Running clickpy. Enter ctrl+c to stop.\n\nKeyboardInterrupt thrown and caught. Exiting script\n"
@@ -65,7 +65,7 @@ def test_main_all_options(mocker: MockerFixture, capsys: CaptureFixture) -> None
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(fast_click=True, print_debug=True)
+    mock_clickpy.assert_called_once_with(sleep_time=1, print_debug=True)
     assert (
         call
         == "Running clickpy. Enter ctrl+c to stop.\nfast_click flag passed in. Using thread.sleep(1), instead of a random interval.\n\nKeyboardInterrupt thrown and caught. Exiting script\n"
