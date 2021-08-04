@@ -2,27 +2,38 @@
 
 Automated mouse clicker script.
 
-## Dependencies
+## Installation
+
+I've only tested this packag with Python 3.9. You'll need to download and install it, or use pyenv and set your local version with this command:
+
+```bash
+pyenv local 3.9
+```
+
+I also recommend using pipx for installing standalone packages, as it will add a layer of isolation to your installation. But pip will work too:
+
+```bash
+pipx install clickpy
+# -- or --
+pip install clickpy
+```
+
+## Development
 
 Using [Poetry][1] to manage the virtual environment and packages. I also highly recommend using [Pyenv][2] to install and manage your python interpreters.
 
 This script uses [pyautogui][3] for clicking and [Typer][4] for CLI parsing.
 
-## Installation
-
-TODO: Work in Progress (still figuring out packaging and installation.)
-
-## Development
-
-TODO: Fix this section
-
-## Testing
+### Testing
 
 This project utilizes [pytest][5] and [pytest-mock][6]. Both should be included in pyproject.toml dev dependencies, and `.vscode/settings.json` should already be setup to use these libraries.
 
 Please type annotate any mocks used, which should be `MockerFixture` if you use pytest-mock.
 
-## Scripts
+### Scripts
+
+The following is for developers. You don't need to run these scripts to install and run from pip.
+
 
 ```bash
 # define your local python version
@@ -46,10 +57,20 @@ python -m pytest -v --cov=clickpy --capture=sys tests/
 coverage html
 ```
 
+Open coverage report in bash. This should also work with Windows Git Bash
+
 ```bash
 # open html coverage doc, windows doesn't have open.
 [ -x "$(command -v open)" ] && open htmlcov/index.html || start htmlcov/index.html
 ```
+
+Here's a Powershell version:
+
+```powershell
+start htmlcov\index.html
+```
+
+And also a fish version.
 
 ```sh
 # same command for fish shell
