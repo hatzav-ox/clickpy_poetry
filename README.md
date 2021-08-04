@@ -4,13 +4,13 @@ Automated mouse clicker script.
 
 ## Installation
 
-I've only tested this packag with Python 3.9. You'll need to download and install it, or use pyenv and set your local version with this command:
+I've only tested this packag with Python 3.9. You'll need to download and install it, or use [pyenv][2] and set your local version with this command:
 
 ```bash
 pyenv local 3.9
 ```
 
-I also recommend using pipx for installing standalone packages, as it will add a layer of isolation to your installation. But pip will work too:
+I also recommend using [pipx][7] for installing standalone packages, as it will add a layer of isolation to your installation. But pip will work too:
 
 ```bash
 pipx install clickpy
@@ -34,7 +34,6 @@ Please type annotate any mocks used, which should be `MockerFixture` if you use 
 
 The following is for developers. You don't need to run these scripts to install and run from pip.
 
-
 ```bash
 # define your local python version
 pyenv local 3.9.6
@@ -45,11 +44,19 @@ pyenv local 3.9.6
 poetry install
 ```
 
+To run clickpy with poetry. This will activate the virtualenv, and then run the script defined in `[tool.poetry.scripts]` in pyproject.toml.
+
+```bash
+poetry run clickpy
+```
+
+TODO: might look into tox later, also pre-commit looks interesting.
+
 ```bash
 # activate virtual environment first
 poetry shell
 # run tests, also outputs code coverage
-python -m pytest -v --cov=clickpy --capture=sys tests/
+pytest -v --cov=clickpy --capture=sys tests/
 ```
 
 ```bash
@@ -83,3 +90,4 @@ And also a fish version.
 [4]: https://github.com/tiangolo/typer
 [5]: https://github.com/pytest-dev/pytest
 [6]: https://github.com/pytest-dev/pytest-mock
+[7]: https://github.com/pypa/pipx
