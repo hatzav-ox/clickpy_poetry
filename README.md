@@ -1,6 +1,6 @@
 # clickpy
 
-Automated mouse clicker using python
+Automated mouse clicker script.
 
 ## Dependencies
 
@@ -8,18 +8,13 @@ Using [Poetry](1) to manage the virtual environment and packages. I also highly 
 
 This script uses [pyautogui](3) for clicking and [Typer](4) for CLI parsing.
 
-## Running
+## Installation
 
-**Note** You'll need to install and activate a pipenv virtual environment. I'm still figuring out how to package and install python scripts.
+TODO: Work in Progress (still figuring out packaging and installation.)
 
-To Install:
+## Development
 
-```bash
-pipenv install
-# -- or --
-# pipenv install --dev # to get all dependecies
-pipenv shell # activate virtual environment
-```
+TODO: Fix this section
 
 ## Testing
 
@@ -30,6 +25,13 @@ Please type annotate any mocks used, which should be `MockerFixture` if you use 
 ## Scripts
 
 ```bash
+# define your local python version
+pyenv local 3.9.6
+```
+
+```bash
+# activate virtual environment first
+poetry shell
 # run tests, also outputs code coverage
 python -m pytest -v --cov=clickpy --capture=sys tests/
 ```
@@ -49,7 +51,7 @@ coverage html
 [ -x (command -v open) ] && open htmlcov/index.html || start htmlcov/index.html
 ```
 
-[1]: https://github.com/pypa/pipenv
+[1]: https://github.com/python-poetry/poetry
 [2]: https://github.com/pyenv/pyenv
 [3]: https://github.com/asweigart/pyautogui
 [4]: https://github.com/tiangolo/typer
