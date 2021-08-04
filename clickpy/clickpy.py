@@ -1,4 +1,4 @@
-"""Auto Mouse Clicker Script. Make it look like your still online with Python Automation."""
+"""Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
 
 from random import randint
 from time import sleep
@@ -37,8 +37,8 @@ def _main(
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
     fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
 ) -> None:
-    """Auto Mouse Clicker Script. Make it look like your still online with Python Automation." """
-    print("Running clicker. Enter ctrl+c to stop.")
+    """Auto Mouse clickpy Script. Make it look like your still online with Python Automation." """
+    print("Running clickpy. Enter ctrl+c to stop.")
 
     if debug and fast_click:
         print(
