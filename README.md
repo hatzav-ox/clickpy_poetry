@@ -4,9 +4,9 @@ Automated mouse clicker script.
 
 ## Dependencies
 
-Using [Poetry](1) to manage the virtual environment and packages. I also highly recommend using [Pyenv](2) to install and manage your python interpreters.
+Using [Poetry][1] to manage the virtual environment and packages. I also highly recommend using [Pyenv][2] to install and manage your python interpreters.
 
-This script uses [pyautogui](3) for clicking and [Typer](4) for CLI parsing.
+This script uses [pyautogui][3] for clicking and [Typer][4] for CLI parsing.
 
 ## Installation
 
@@ -18,7 +18,7 @@ TODO: Fix this section
 
 ## Testing
 
-This project utilizes [pytest](5) and [pytest-mock](6). Both should be included in `Pipfile`, and `.vscode/settings.json` should already be setup to use these libraries.
+This project utilizes [pytest][5] and [pytest-mock][6]. Both should be included in pyproject.toml dev dependencies, and `.vscode/settings.json` should already be setup to use these libraries.
 
 Please type annotate any mocks used, which should be `MockerFixture` if you use pytest-mock.
 
@@ -27,6 +27,11 @@ Please type annotate any mocks used, which should be `MockerFixture` if you use 
 ```bash
 # define your local python version
 pyenv local 3.9.6
+```
+
+```bash
+# install all deps from pyproject.toml
+poetry install
 ```
 
 ```bash
