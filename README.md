@@ -60,5 +60,5 @@ coverage html
 [2]: https://github.com/pyenv/pyenv
 [3]: https://github.com/asweigart/pyautogui
 [4]: https://github.com/tiangolo/typer
-[5]: pytest.org
+[5]: https://github.com/pytest-dev/pytest
 [6]: https://github.com/pytest-dev/pytest-mock
