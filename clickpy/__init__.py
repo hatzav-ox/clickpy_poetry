@@ -1,2 +1,2 @@
-from .clickpy import run
+from .cli import run
 from .clickpy import auto_click
