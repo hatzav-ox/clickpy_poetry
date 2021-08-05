@@ -12,7 +12,7 @@ exclude = [".vscode/settings.json"]
 "Bug Tracker" = "https://github.com/fitzlang/clickpy/issues"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.6.11"
 typer = "^0.3.2"
 PyAutoGUI = "^0.9.53"
 
@@ -23,6 +23,7 @@ pytest = "^6.2.4"
 pytest-mock = "^3.6.1"
 pytest-cov = "^2.12.1"
 coverage = "^5.5"
+tox = "^3.24.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

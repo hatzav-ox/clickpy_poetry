@@ -5,12 +5,10 @@ from pytest_mock import MockerFixture
 
 def test_main_no_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
     # Arrange
-    mock_clickpy = mocker.patch(
-        "clickpy.clickpy.auto_click", side_effect=KeyboardInterrupt
-    )
+    mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
 
     # Act
-    clickpy.clickpy._main(fast_click=None, debug=None)
+    clickpy.cli._main(fast_click=None, debug=None)
 
     # Assert
     call, err = capsys.readouterr()
@@ -21,12 +19,10 @@ def test_main_no_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
 
 def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:
     # Arrange
-    mock_clickpy = mocker.patch(
-        "clickpy.clickpy.auto_click", side_effect=KeyboardInterrupt
-    )
+    mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
 
     # Act
-    clickpy.clickpy._main(fast_click=True, debug=None)
+    clickpy.cli._main(fast_click=True, debug=None)
 
     # Assert
     call, err = capsys.readouterr()
@@ -37,12 +33,10 @@ def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -
 
 def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:
     # Arrange
-    mock_clickpy = mocker.patch(
-        "clickpy.clickpy.auto_click", side_effect=KeyboardInterrupt
-    )
+    mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
 
     # Act
-    clickpy.clickpy._main(fast_click=False, debug=True)
+    clickpy.cli._main(fast_click=False, debug=True)
 
     # Assert
     call, err = capsys.readouterr()
@@ -56,12 +50,10 @@ def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) 
 
 def test_main_all_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
     # Arrange
-    mock_clickpy = mocker.patch(
-        "clickpy.clickpy.auto_click", side_effect=KeyboardInterrupt
-    )
+    mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
 
     # Act
-    clickpy.clickpy._main(fast_click=True, debug=True)
+    clickpy.cli._main(fast_click=True, debug=True)
 
     # Assert
     call, err = capsys.readouterr()
