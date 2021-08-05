@@ -56,12 +56,36 @@ TODO: might look into tox later, also pre-commit looks interesting.
 # activate virtual environment first
 poetry shell
 # run tests, also outputs code coverage
-pytest -v --cov=clickpy --capture=sys tests/
+pytest -v --cov=clickpy tests/
+
+# -- or --
+
+# run this outside virtualenv
+poetry run pytest -v --cov=clickpy tests/
+```
+
+```bash
+# run tox tests
+poetry env tox
+
+# -- or --
+poetry shel
+tox
+
+# you may need to run this command, if pyautogui throws errors
+touch ~/.Xauthority
 ```
 
 ```bash
 # run this to generate report
 coverage html
+# open html coverage
+open htmlcov/index.html
+
+# -- or --
+
+# for windows, opening html coverage
+start htmlcov/index.html
 ```
 
 Open coverage report in bash. This should also work with Windows Git Bash
@@ -70,14 +94,6 @@ Open coverage report in bash. This should also work with Windows Git Bash
 # open html coverage doc, windows doesn't have open.
 [ -x "$(command -v open)" ] && open htmlcov/index.html || start htmlcov/index.html
 ```
-
-Here's a Powershell version:
-
-```powershell
-start htmlcov\index.html
-```
-
-And also a fish version.
 
 ```sh
 # same command for fish shell
