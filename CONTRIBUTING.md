@@ -75,6 +75,17 @@ poetry run coverage html
 [ -x (command -v open) ] && open htmlcov/index.html || start htmlcov/index.html
 ```
 
+tagging a release / semantic bump. I don't put a `v` in front, I think it's simplier, and most people know what a semantic version string of numbers means (I hope...)
+
+```bash
+poetry version [patch, minor, major, prepatch, preminor, premajor, prerelease]
+
+git tag "$(poetry version -s)"
+
+# fish version
+git tag (poetry veresion -s)
+```
+
 ## Recommended Extensions
 
 I primarily use vscode for most of my development. Here's a list of files I recommend:
