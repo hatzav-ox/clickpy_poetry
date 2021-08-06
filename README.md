@@ -1,16 +1,20 @@
 # clickpy
 
-Automated mouse clicker script.
+Automated mouse clicker script using [PyAutoGUI][1] and [Typer][2].
+
+This app will randomly click your mouse between 1 second and 3 minutes, to prevent your screen and apps from sleeping or displaying an `away` status.
+
+The rational behind the random interval is: if the mouse contiually clicked every second or millisecond, it could easily be detected as an automated process.
+
+The random interval provides a sembalance of feasability, although the interval could be reduced and extended as needed, or move the cursor after a couple consecutive clicks. (Possibe feature feature?)
+
+PyAutoGUI provides a simple interface to the mouse, and Typer provides simple cli parsing. You can find out more about these libraries with the links provided above.
 
 ## Installation
 
-I've only tested this packag with Python 3.9. You'll need to download and install it, or use [pyenv][2] and set your local version with this command:
+This package supports Python 3.6 through 3.9. It does not support any version of Python 2, nor any version of 3 lower than 3.6. Please upgrade our Python version, if possible.
 
-```bash
-pyenv local 3.9
-```
-
-I also recommend using [pipx][7] for installing standalone packages, as it will add a layer of isolation to your installation. But pip will work too:
+I highly recommend using [pipx][3] for installing standalone packages, as it adds a layer of isolation to your installation. But pip will also work.
 
 ```bash
 pipx install clickpy
@@ -18,92 +22,33 @@ pipx install clickpy
 pip install clickpy
 ```
 
-## Development
+If you're running Linux, you may have to install additional dependencies for PyAutoGUI to work properly. Please review their [docs][4] for additional information.
 
-Using [Poetry][1] to manage the virtual environment and packages. I also highly recommend using [Pyenv][2] to install and manage your python interpreters.
-
-This script uses [pyautogui][3] for clicking and [Typer][4] for CLI parsing.
-
-### Testing
-
-This project utilizes [pytest][5] and [pytest-mock][6]. Both should be included in pyproject.toml dev dependencies, and `.vscode/settings.json` should already be setup to use these libraries.
-
-Please type annotate any mocks used, which should be `MockerFixture` if you use pytest-mock.
-
-### Scripts
-
-The following is for developers. You don't need to run these scripts to install and run from pip.
+To uninstall, type in your terminal:
 
 ```bash
-# define your local python version
-pyenv local 3.9.6
-```
-
-```bash
-# install all deps from pyproject.toml
-poetry install
-```
-
-To run clickpy with poetry. This will activate the virtualenv, and then run the script defined in `[tool.poetry.scripts]` in pyproject.toml.
-
-```bash
-poetry run clickpy
-```
-
-TODO: might look into tox later, also pre-commit looks interesting.
-
-```bash
-# activate virtual environment first
-poetry shell
-# run tests, also outputs code coverage
-pytest -v --cov=clickpy tests/
-
+pipx uninstall clickpy
 # -- or --
-
-# run this outside virtualenv
-poetry run pytest -v --cov=clickpy tests/
+pip uninstall clickpy
 ```
+
+## Running
+
+Once this package is installed, and any additional dependencies too, run the app like so:
 
 ```bash
-# run tox tests
-poetry env tox
-
-# -- or --
-poetry shel
-tox
-
-# you may need to run this command, if pyautogui throws errors
-touch ~/.Xauthority
+clickpy
 ```
 
-```bash
-# run this to generate report
-coverage html
-# open html coverage
-open htmlcov/index.html
+To stop it, press `ctrl+c`.
 
-# -- or --
+There are 3 flags you can use; `-d` will display debug information, `-f` will speed the app up to 1 click every second, and `--help` will display the help menu.
 
-# for windows, opening html coverage
-start htmlcov/index.html
-```
+## For Developers
 
-Open coverage report in bash. This should also work with Windows Git Bash
+Please read [contributing.md](./CONTRIBUTING.md) for more information about this repo, how it's maintained and developed. And feel free to make PRs.
 
-```bash
-# open html coverage doc, windows doesn't have open.
-[ -x "$(command -v open)" ] && open htmlcov/index.html || start htmlcov/index.html
-```
-
-```sh
-# same command for fish shell
-[ -x (command -v open) ] && open htmlcov/index.html || start htmlcov/index.html
-```
-
-[1]: https://github.com/python-poetry/poetry
-[2]: https://github.com/pyenv/pyenv
-[3]: https://github.com/asweigart/pyautogui
-[4]: https://github.com/tiangolo/typer
-[5]: https://github.com/pytest-dev/pytest
-[6]: https://github.com/pytest-dev/pytest-mock
-[7]: https://github.com/pypa/pipx
+[1]: https://github.com/asweigart/pyautogui
+[2]: https://github.com/tiangolo/typer
+[3]: https://github.com/pypa/pipx
+[4]: https://github.com/asweigart/pyautogui/blob/master/docs/install.rst
