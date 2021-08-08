@@ -1,10 +1,12 @@
+# noqa
+
 import clickpy
 from clickpy.clickers.basic_clicks import BasicRandomClickStrategy, FastClickStrategy
 from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 
 
-def test_main_no_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
+def test_main_no_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
     # Arrange
     mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
     # Act
@@ -17,7 +19,7 @@ def test_main_no_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
     assert err == ""
 
 
-def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:
+def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
     # Arrange
     mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
 
@@ -31,7 +33,7 @@ def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -
     assert err == ""
 
 
-def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:
+def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
     # Arrange
     mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
 
@@ -48,7 +50,7 @@ def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) 
     assert err == ""
 
 
-def test_main_all_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
+def test_main_all_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
     # Arrange
     mock_clickpy = mocker.patch("clickpy.cli.auto_click", side_effect=KeyboardInterrupt)
 

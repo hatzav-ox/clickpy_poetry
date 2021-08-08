@@ -1,3 +1,5 @@
+# noqa
+
 # import clickpy
 # from pytest import CaptureFixture
 # from pytest_mock import MockerFixture

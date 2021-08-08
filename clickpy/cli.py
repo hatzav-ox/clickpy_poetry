@@ -17,13 +17,11 @@ def _main(
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
     fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
 ) -> None:
-    """Auto Mouse clickpy Script. Make it look like your still online with Python Automation." """
+    """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
     print("Running clickpy. Enter ctrl+c to stop.")
 
     if debug and fast_click:
-        print(
-            "fast_click flag passed in. Using thread.sleep(1), instead of a random interval."
-        )
+        print("fast_click flag passed in. Using thread.sleep(1), instead of a random interval.")
 
     click_strategy = (
         BasicRandomClickStrategy(print_debug=debug)
@@ -35,9 +33,7 @@ def _main(
             auto_click(click_strategy)
         except KeyboardInterrupt:
             msg = (
-                "KeyboardInterrupt thrown and caught. Exiting script"
-                if debug
-                else "Back to work!"
+                "KeyboardInterrupt thrown and caught. Exiting script" if debug else "Back to work!"
             )
             print(f"\n{msg}")
             break
@@ -45,7 +41,9 @@ def _main(
 
 def run() -> None:
     """
-    Common entry point. A wrapper around main function, that setups typer and executes main(...).
+    CLI entry point.
+
+    A wrapper around main function, that setups typer and executes main(...).
     """
     typer.run(_main)
 

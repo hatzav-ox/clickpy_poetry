@@ -6,10 +6,11 @@ from time import sleep
 from typing import Optional
 
 import pyautogui
+from clickpy.clickers.click_protocol import SupportsClick
 
 
 @dataclass
-class BasicRandomClickStrategy:
+class BasicRandomClickStrategy(SupportsClick):
     """The first random clicking strategy I came up with."""
 
     min_sleep_time: int = 1
@@ -18,10 +19,12 @@ class BasicRandomClickStrategy:
     print_debug: Optional[bool] = None
 
     def click(self) -> None:
-        """SupportsClick Protocol method.
+        """
+        Protocol method for SupportsClick.
 
         Either use the sleep_time passed into the ctr, or get a random int
-        between min_sleep_time and max_sleep_time."""
+        between min_sleep_time and max_sleep_time.
+        """
         timer = (
             self.sleep_time
             if self.sleep_time
@@ -40,14 +43,15 @@ class BasicRandomClickStrategy:
 
 
 @dataclass
-class FastClickStrategy:
+class FastClickStrategy(SupportsClick):
     """Fast Clicking Strategy."""
 
     sleep_time = 1
     print_debug: Optional[bool] = None
 
     def click(self) -> None:
-        """SupportsClick Protocol method.
+        """
+        Protocol method for SupportsClick.
 
         Defaults to 1 second sleep time, or whatever value is passed in from ctr.
         """
