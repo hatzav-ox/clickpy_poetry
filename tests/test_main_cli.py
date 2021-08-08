@@ -1,5 +1,5 @@
 import clickpy
-from clickpy.clickers.basic_clicks import BaseClickStrategy, FastClickStrategy
+from clickpy.clickers.basic_clicks import BasicRandomClickStrategy, FastClickStrategy
 from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 
@@ -12,7 +12,7 @@ def test_main_no_options(mocker: MockerFixture, capsys: CaptureFixture) -> None:
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(BaseClickStrategy())
+    mock_clickpy.assert_called_once_with(BasicRandomClickStrategy())
     assert call == "Running clickpy. Enter ctrl+c to stop.\n\nBack to work!\n"
     assert err == ""
 
@@ -40,7 +40,7 @@ def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) 
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(BaseClickStrategy(print_debug=True))
+    mock_clickpy.assert_called_once_with(BasicRandomClickStrategy(print_debug=True))
     assert (
         call
         == "Running clickpy. Enter ctrl+c to stop.\n\nKeyboardInterrupt thrown and caught. Exiting script\n"

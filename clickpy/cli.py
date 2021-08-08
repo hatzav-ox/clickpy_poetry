@@ -5,7 +5,7 @@ from typing import Optional
 import pyautogui
 import typer
 
-from .clickers import BaseClickStrategy, FastClickStrategy
+from .clickers import BasicRandomClickStrategy, FastClickStrategy
 from .clickpy import auto_click
 
 # Disable FailSafeException when mouse is in screen corners.
@@ -26,7 +26,7 @@ def _main(
         )
 
     click_strategy = (
-        BaseClickStrategy(print_debug=debug)
+        BasicRandomClickStrategy(print_debug=debug)
         if not fast_click
         else FastClickStrategy(print_debug=debug)
     )

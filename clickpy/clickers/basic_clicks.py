@@ -9,8 +9,8 @@ import pyautogui
 
 
 @dataclass
-class BaseClickStrategy:
-    """A Base Clicking Strategy."""
+class BasicRandomClickStrategy:
+    """The first random clicking strategy I came up with."""
 
     min_sleep_time: int = 1
     max_sleep_time: int = 180
