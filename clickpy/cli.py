@@ -2,7 +2,9 @@ from typing import Optional
 
 import typer
 
-from .clickpy import auto_click, pyautogui
+from clickpy import auto_click
+
+from .ClickStrategy import BaseClickStrategy, FastClickStrategy, pyautogui
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
@@ -21,10 +23,12 @@ def _main(
             "fast_click flag passed in. Using thread.sleep(1), instead of a random interval."
         )
 
+    click_strategy = (
+        BaseClickStrategy(print_debug=debug) if not fast_click else FastClickStrategy()
+    )
     while True:
         try:
-            sleep_time = 1 if fast_click else None
-            auto_click(sleep_time=sleep_time, print_debug=debug)
+            auto_click(click_strategy)
         except KeyboardInterrupt:
             msg = (
                 "KeyboardInterrupt thrown and caught. Exiting script"
