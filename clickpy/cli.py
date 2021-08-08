@@ -1,10 +1,12 @@
+"""Contains all the cli specific methods for clickpy project."""
+
 from typing import Optional
 
+import pyautogui
 import typer
 
-from clickpy import auto_click
-
-from .ClickStrategy import BaseClickStrategy, FastClickStrategy, pyautogui
+from .clickers import BaseClickStrategy, FastClickStrategy
+from .clickpy import auto_click
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
@@ -24,7 +26,9 @@ def _main(
         )
 
     click_strategy = (
-        BaseClickStrategy(print_debug=debug) if not fast_click else FastClickStrategy()
+        BaseClickStrategy(print_debug=debug)
+        if not fast_click
+        else FastClickStrategy(print_debug=debug)
     )
     while True:
         try:
@@ -40,7 +44,9 @@ def _main(
 
 
 def run() -> None:
-    """Common entry point. A wrapper around main function, that setups typer and executes main(...)."""
+    """
+    Common entry point. A wrapper around main function, that setups typer and executes main(...).
+    """
     typer.run(_main)
 
 

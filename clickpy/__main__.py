@@ -1,6 +1,7 @@
-"""Clicker module file. This will be ran when called via 'python -m clicker'."""
+"""Clickpy, Automated mouse clicking script."""
 
 if __name__ == "__main__":
-    from clickpy import run
+    # from clickpy import run
+    from .cli import run
 
     run()

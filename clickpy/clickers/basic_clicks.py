@@ -1,24 +1,27 @@
+"""Starter Clicking Strategies."""
+
 from dataclasses import dataclass
 from random import randint
 from time import sleep
-from typing import Optional, Protocol
+from typing import Optional
 
 import pyautogui
 
 
-class SupportsClick(Protocol):
-    def __click__(self) -> None:
-        """A dunder method for the auto_click function. Any Clicking Strategy should implement a '__click__' method."""
-
-
 @dataclass
 class BaseClickStrategy:
+    """A Base Clicking Strategy."""
+
     min_sleep_time: int = 1
     max_sleep_time: int = 180
     sleep_time: Optional[int] = None
     print_debug: Optional[bool] = None
 
-    def __click__(self) -> None:
+    def click(self) -> None:
+        """SupportsClick Protocol method.
+
+        Either use the sleep_time passed into the ctr, or get a random int
+        between min_sleep_time and max_sleep_time."""
         timer = (
             self.sleep_time
             if self.sleep_time
@@ -38,11 +41,17 @@ class BaseClickStrategy:
 
 @dataclass
 class FastClickStrategy:
-    timer = 1
+    """Fast Clicking Strategy."""
+
+    sleep_time = 1
     print_debug: Optional[bool] = None
 
-    def __click__(self) -> None:
-        sleep(self.timer)
+    def click(self) -> None:
+        """SupportsClick Protocol method.
+
+        Defaults to 1 second sleep time, or whatever value is passed in from ctr.
+        """
+        sleep(self.sleep_time)
 
         if self.print_debug:
             print("Thread sleep for 1 second.")

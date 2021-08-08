@@ -19,7 +19,7 @@ def test_run_method(mocker: MockerFixture) -> None:
 def test___main__py(mocker: MockerFixture) -> None:
     # Arrange
     mock_typer = mocker.patch("clickpy.cli.typer.run")
-    spy_run = mocker.spy(clickpy, "run")
+    spy_run = mocker.spy(clickpy.cli, "run")
 
     # Act
     # use runpy to run python script like an actual script or modules
