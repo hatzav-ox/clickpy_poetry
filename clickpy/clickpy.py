@@ -10,6 +10,3 @@ def auto_click(
     if not click_strategy:
         click_strategy = BasicRandomClickStrategy()
     click_strategy.click()
-
-
-q = "somevar"
