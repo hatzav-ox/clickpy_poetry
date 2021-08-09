@@ -1,0 +1,3 @@
+from .clickers import BasicRandomClickStrategy as BasicRandomClickStrategy, SupportsClick as SupportsClick
+
+def auto_click(click_strategy: SupportsClick) -> None: ...
