@@ -2,7 +2,8 @@
 
 from typing import Optional
 
-import pyautogui
+# mypy doesn't like pyautogui, and I can't find its py.types
+import pyautogui  # type: ignore
 import typer
 
 from .clickers import BasicRandomClickStrategy, FastClickStrategy

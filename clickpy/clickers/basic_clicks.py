@@ -5,7 +5,7 @@ from random import randint
 from time import sleep
 from typing import Optional
 
-import pyautogui
+import pyautogui  # type: ignore
 from clickpy.clickers.click_protocol import SupportsClick
 
 
