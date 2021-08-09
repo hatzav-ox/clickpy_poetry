@@ -1,3 +1,5 @@
+# noqa
+
 import runpy
 
 import clickpy
@@ -5,7 +7,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 
-def test_run_method(mocker: MockerFixture) -> None:
+def test_run_method(mocker: MockerFixture) -> None:  # noqa
     # Arrange
     mock_typer = mocker.patch("clickpy.cli.typer.run")
 
@@ -16,10 +18,10 @@ def test_run_method(mocker: MockerFixture) -> None:
     mock_typer.assert_called_once_with(clickpy.cli._main)
 
 
-def test___main__py(mocker: MockerFixture) -> None:
+def test___main__py(mocker: MockerFixture) -> None:  # noqa
     # Arrange
     mock_typer = mocker.patch("clickpy.cli.typer.run")
-    spy_run = mocker.spy(clickpy, "run")
+    spy_run = mocker.spy(clickpy.cli, "run")
 
     # Act
     # use runpy to run python script like an actual script or modules
@@ -31,7 +33,7 @@ def test___main__py(mocker: MockerFixture) -> None:
 
 
 @pytest.mark.skip(reason="Can't figure out how to call file __main__ block.")
-def test__name_equals__main_clickpy(mocker: MockerFixture) -> None:
+def test__name_equals__main_clickpy(mocker: MockerFixture) -> None:  # noqa
     # Arrange
     spy_run = mocker.spy(clickpy, "run")
     mock_typer = mocker.patch("clickpy.cli.typer.run")

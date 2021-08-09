@@ -22,7 +22,9 @@ pipx install clickpy
 pip install clickpy
 ```
 
-If you're running Linux, you may have to install additional dependencies for PyAutoGUI to work properly. Please review their [docs][4] for additional information.
+If you're using macOS or Linux, you may have to install additional dependencies for PyAutoGUI to work properly. Please review their [docs][4] for additional information.
+
+Windows users don't have to install any additional software.
 
 To uninstall, type in your terminal:
 
