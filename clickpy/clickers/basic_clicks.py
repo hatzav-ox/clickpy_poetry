@@ -6,11 +6,10 @@ from time import sleep
 from typing import Optional
 
 import pyautogui  # type: ignore
-from clickpy.clickers.click_protocol import SupportsClick
 
 
 @dataclass
-class BasicRandomClickStrategy(SupportsClick):
+class BasicRandomClickStrategy:
     """The first random clicking strategy I came up with."""
 
     min_sleep_time: int = 1
@@ -43,7 +42,7 @@ class BasicRandomClickStrategy(SupportsClick):
 
 
 @dataclass
-class FastClickStrategy(SupportsClick):
+class FastClickStrategy:
     """Fast Clicking Strategy."""
 
     sleep_time = 1

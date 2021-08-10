@@ -1,4 +1,6 @@
 """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
+
+
 from .clickers import BasicRandomClickStrategy, SupportsClick
 
 

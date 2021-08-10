@@ -4,4 +4,4 @@ if __name__ == "__main__":
     # from clickpy import run
     from .cli import run
 
-    run()
+    raise SystemExit(run())
