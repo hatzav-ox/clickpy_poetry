@@ -7,17 +7,6 @@ from clickpy.click_strategy import BasicClickStrategy, SupportsClick
 from clickpy.main import auto_click
 
 
-def test_auto_click_throws_type_error_if_arg_not_SupportsClick_subtype():  # noqa
-    with pytest.raises(TypeError) as excinfo:
-        auto_click(None)  # type: ignore
-
-    assert excinfo.type is TypeError
-    assert (
-        excinfo.value.args[0] == f"Argument passed in of type {type(None)} does not implement"
-        f" {SupportsClick.__name__}"
-    )
-
-
 def test_auto_click_works():  # noqa
     # Arrange
     basic = BasicClickStrategy()
@@ -44,3 +33,14 @@ def test_auto_click_structural_subtyping_works() -> None:  # noqa
 
     # Assert
     some_obj.__click__.assert_called_once()  # type: ignore
+
+
+def test_auto_click_throws_type_error_if_arg_not_SupportsClick_subtype():  # noqa
+    with pytest.raises(TypeError) as excinfo:
+        auto_click(None)  # type: ignore
+
+    assert excinfo.type is TypeError
+    assert (
+        excinfo.value.args[0] == f"Argument passed in of type {type(None)} does not implement"
+        f" {SupportsClick.__name__}"
+    )
