@@ -12,9 +12,9 @@ import typer
 @runtime_checkable
 class SupportsClick(Protocol):  # pylint: disable=R0903
     """
-       Definition of SupportsClick Protocol.
+    Definition of SupportsClick Protocol.
 
-       Any object with a `click(self)` method can be considered a structural sub-type of
+    Any object with a `__click__()` method can be considered a structural sub-type of
     SupportsClick.
     """
 
@@ -22,13 +22,18 @@ class SupportsClick(Protocol):  # pylint: disable=R0903
         """
         Protocol method for the auto_click function.
 
-        Any Clicking Strategy should implement a '__click__' method.
+        Any ClickStrategy class should implement a '__click__' method.
         """
 
 
 @dataclass
 class BasicClickStrategy:
-    """The first random clicking strategy I came up with."""
+    """The first, very basic clicking strategy I came up with.
+
+    Before clicking, __click__ will tell the current thread to sleep.
+    If self.sleep_time has a value, it will use that as the thread sleep time.
+    Else, it will generate a random number between 1 and 180 (3 minutes).
+    """
 
     min_sleep_bound: int = 1
     max_sleep_bound: int = 180
@@ -40,8 +45,12 @@ class BasicClickStrategy:
         """
         Protocol method for SupportsClick.
 
-        Either use the sleep_time passed into the ctr, or get a random int
+        Process:
+        1. Either use the sleep_time passed into the ctr, or get a random int
         between min_sleep_time and max_sleep_time.
+        2. Pause the current thread with above int (in seconds).
+        3. call pyautogui.click()
+        Optional: print statements if print_debug = True.
         """
         timer = (
             self.sleep_time
