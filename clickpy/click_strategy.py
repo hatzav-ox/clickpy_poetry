@@ -58,12 +58,15 @@ class BasicClickStrategy:
             else randint(self.min_sleep_bound, self.max_sleep_bound)
         )
 
-        if self.print_debug:
+        if self.print_debug and not self.sleep_time:
             self.echo(f"Random thread sleep for {timer} seconds.")
+
+        if self.print_debug:
+            self.echo("Thread sleeping now...")
 
         sleep(timer)
 
         pyautogui.click()
 
         if self.print_debug:
-            self.echo("Clicked")
+            self.echo("... Clicked")
