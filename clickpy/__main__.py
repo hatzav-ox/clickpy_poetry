@@ -2,6 +2,6 @@
 
 if __name__ == "__main__":
     # from clickpy import run
-    from .cli import run
+    from clickpy import app
 
-    run()
+    raise SystemExit(app())

@@ -3,22 +3,23 @@
 from dataclasses import dataclass
 from random import randint
 from time import sleep
-from typing import Optional
+from typing import Callable, Optional, Protocol, runtime_checkable
 
-import pyautogui  # type: ignore
-from clickpy.clickers.click_protocol import SupportsClick
+import pyautogui  # type ignore
+import typer
 
 
 @dataclass
-class BasicRandomClickStrategy(SupportsClick):
+class BasicClickStrategy:
     """The first random clicking strategy I came up with."""
 
     min_sleep_time: int = 1
     max_sleep_time: int = 180
     sleep_time: Optional[int] = None
     print_debug: Optional[bool] = None
+    echo: Callable[[object], None] = typer.echo
 
-    def click(self) -> None:
+    def __click__(self) -> None:
         """
         Protocol method for SupportsClick.
 
@@ -32,35 +33,28 @@ class BasicRandomClickStrategy(SupportsClick):
         )
 
         if self.print_debug:
-            print(f"Random thread sleep for {timer} seconds.")
+            self.echo(f"Random thread sleep for {timer} seconds.")
 
         sleep(timer)
 
         pyautogui.click()
 
         if self.print_debug:
-            print("Clicked")
+            self.echo("Clicked")
 
 
-@dataclass
-class FastClickStrategy(SupportsClick):
-    """Fast Clicking Strategy."""
+@runtime_checkable
+class SupportsClick(Protocol):  # pylint: disable=R0903
+    """
+       Definition of SupportsClick Protocol.
 
-    sleep_time = 1
-    print_debug: Optional[bool] = None
+       Any object with a `click(self)` method can be considered a structural sub-type of
+    SupportsClick.
+    """
 
-    def click(self) -> None:
+    def __click__(self) -> None:
         """
-        Protocol method for SupportsClick.
+        Protocol method for the auto_click function.
 
-        Defaults to 1 second sleep time, or whatever value is passed in from ctr.
+        Any Clicking Strategy should implement a '__click__' method.
         """
-        sleep(self.sleep_time)
-
-        if self.print_debug:
-            print("Thread sleep for 1 second.")
-
-        pyautogui.click()
-
-        if self.print_debug:
-            print("Clicked!")
