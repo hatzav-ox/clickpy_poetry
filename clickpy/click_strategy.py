@@ -5,7 +5,7 @@ from random import randint
 from time import sleep
 from typing import Callable, Optional, Protocol, runtime_checkable
 
-import pyautogui  # type ignore
+import pyautogui  # type: ignore
 import typer
 
 
@@ -13,8 +13,8 @@ import typer
 class BasicClickStrategy:
     """The first random clicking strategy I came up with."""
 
-    min_sleep_time: int = 1
-    max_sleep_time: int = 180
+    min_sleep_bound: int = 1
+    max_sleep_bound: int = 180
     sleep_time: Optional[int] = None
     print_debug: Optional[bool] = None
     echo: Callable[[object], None] = typer.echo
@@ -29,7 +29,7 @@ class BasicClickStrategy:
         timer = (
             self.sleep_time
             if self.sleep_time
-            else randint(self.min_sleep_time, self.max_sleep_time)
+            else randint(self.min_sleep_bound, self.max_sleep_bound)
         )
 
         if self.print_debug:
