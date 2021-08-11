@@ -1,4 +1,4 @@
-"""Starter Clicking Strategies."""
+"""All Clicking Strategies should be placed in this folder."""
 
 from dataclasses import dataclass
 from random import randint
@@ -7,6 +7,23 @@ from typing import Callable, Optional, Protocol, runtime_checkable
 
 import pyautogui  # type: ignore
 import typer
+
+
+@runtime_checkable
+class SupportsClick(Protocol):  # pylint: disable=R0903
+    """
+       Definition of SupportsClick Protocol.
+
+       Any object with a `click(self)` method can be considered a structural sub-type of
+    SupportsClick.
+    """
+
+    def __click__(self) -> None:
+        """
+        Protocol method for the auto_click function.
+
+        Any Clicking Strategy should implement a '__click__' method.
+        """
 
 
 @dataclass
@@ -41,20 +58,3 @@ class BasicClickStrategy:
 
         if self.print_debug:
             self.echo("Clicked")
-
-
-@runtime_checkable
-class SupportsClick(Protocol):  # pylint: disable=R0903
-    """
-       Definition of SupportsClick Protocol.
-
-       Any object with a `click(self)` method can be considered a structural sub-type of
-    SupportsClick.
-    """
-
-    def __click__(self) -> None:
-        """
-        Protocol method for the auto_click function.
-
-        Any Clicking Strategy should implement a '__click__' method.
-        """

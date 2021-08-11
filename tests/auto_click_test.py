@@ -3,7 +3,8 @@
 from unittest.mock import MagicMock
 
 import pytest
-from clickpy import BasicClickStrategy, SupportsClick, auto_click
+from clickpy.click_strategy import BasicClickStrategy, SupportsClick
+from clickpy.main import auto_click
 
 
 def test_auto_click_throws_type_error_if_arg_not_SupportsClick_subtype():  # noqa
