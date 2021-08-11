@@ -16,8 +16,16 @@ pyautogui.FAILSAFE = False
 def auto_click(
     click_strategy: SupportsClick,
 ) -> None:
-    """Redo this when you've decided on a stable(ish) api."""
-    # TODO: Fix docstring when a stable api is defined
+    """
+    Call `__click__` method of the object passed in.
+
+    Args:
+    click_strategy (SupportsClick): Should be a ClickStrategy object.
+
+    Raises:
+    TypeError: If click_strategy is not a structural subtype of SupportClicks,
+    TypeError will be raise.
+    """
     if not isinstance(click_strategy, SupportsClick):
         raise TypeError(
             f"Argument passed in of type {type(click_strategy)} does not implement"
