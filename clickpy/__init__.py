@@ -24,8 +24,11 @@ def auto_click(
 ) -> None:
     """Redo this when you've decided on a stable(ish) api."""
     # TODO: Fix docstring when a stable api is defined
-    if not click_strategy:
-        click_strategy = BasicClickStrategy()
+    if not isinstance(click_strategy, SupportsClick):
+        raise TypeError(
+            f"Argument passed in of type {type(click_strategy)} does not implement"
+            f" {SupportsClick.__name__}"
+        )
     click_strategy.__click__()
 
 
