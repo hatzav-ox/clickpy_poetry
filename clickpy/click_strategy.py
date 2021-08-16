@@ -37,7 +37,7 @@ class BasicClickStrategy:
 
     min_sleep_bound: int = 1
     max_sleep_bound: int = 180
-    sleep_time: Optional[int] = None
+    sleep_time: Optional[float] = None
     print_debug: Optional[bool] = None
     echo: Callable[[object], None] = typer.echo
 
@@ -55,7 +55,7 @@ class BasicClickStrategy:
         timer = (
             self.sleep_time
             if self.sleep_time
-            else randint(self.min_sleep_bound, self.max_sleep_bound)
+            else float(randint(self.min_sleep_bound, self.max_sleep_bound))
         )
 
         if self.print_debug and not self.sleep_time:

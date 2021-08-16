@@ -60,7 +60,7 @@ def test_BasicClickStrategy_prints_stdout_when_print_debug_is_True(
 
     # Assert
     assert basic_click.sleep_time is sleep_time
-    assert out == f"Random thread sleep for {basic_click.sleep_time} seconds.\nClicked\n"
+    assert out == f"Thread sleeping now...\n... Clicked\n"
     assert err == ""
     mock_sleep.assert_called_once_with(sleep_time)
     mock_gui_click.assert_called_once()

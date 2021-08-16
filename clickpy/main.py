@@ -23,8 +23,7 @@ def auto_click(
     click_strategy (SupportsClick): Should be a ClickStrategy object.
 
     Raises:
-    TypeError: If click_strategy is not a structural subtype of SupportClicks,
-    TypeError will be raise.
+    TypeError: Error raised if click_strategy is not a structural subtype of SupportClicks,
     """
     if not isinstance(click_strategy, SupportsClick):
         raise TypeError(
@@ -45,7 +44,7 @@ def main(
     """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
     print("Running clickpy. Enter ctrl+c to stop.")
 
-    sleep_time = 1 if fast_click else None
+    sleep_time = 0.5 if fast_click else None
 
     if debug and fast_click:
         print("fast_click flag passed in. Using thread.sleep(1), instead of a random interval.")
