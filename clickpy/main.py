@@ -1,34 +1,55 @@
-"""Contains all the cli specific methods for clickpy project."""
+"""Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
 
-from typing import Any, Optional
+from typing import Optional
 
 # mypy doesn't like pyautogui, and I can't find its py.types
 import pyautogui  # type: ignore
 import typer
 
-from .clickers import BasicRandomClickStrategy, FastClickStrategy
-from .clickpy import auto_click
+from .click_strategy import BasicClickStrategy, SupportsClick
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
 pyautogui.FAILSAFE = False
 
 
-def _main(
+def auto_click(
+    click_strategy: SupportsClick,
+) -> None:
+    """
+    Call `__click__` method of the object passed in.
+
+    Args:
+    click_strategy (SupportsClick): Should be a ClickStrategy object.
+
+    Raises:
+    TypeError: Error raised if click_strategy is not a structural subtype of SupportClicks,
+    """
+    if not isinstance(click_strategy, SupportsClick):
+        raise TypeError(
+            f"Argument passed in of type {type(click_strategy)} does not implement"
+            f" {SupportsClick.__name__}"
+        )
+    click_strategy.__click__()
+
+
+app = typer.Typer()
+
+
+@app.command()
+def main(
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
     fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
 ) -> int:
     """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
     print("Running clickpy. Enter ctrl+c to stop.")
 
+    sleep_time = 0.5 if fast_click else None
+
     if debug and fast_click:
         print("fast_click flag passed in. Using thread.sleep(1), instead of a random interval.")
 
-    click_strategy: Any = (
-        BasicRandomClickStrategy(print_debug=debug)
-        if not fast_click
-        else FastClickStrategy(print_debug=debug)
-    )
+    click_strategy = BasicClickStrategy(sleep_time=sleep_time, print_debug=debug)
 
     while True:
         try:
@@ -43,14 +64,5 @@ def _main(
     return 0
 
 
-def run() -> int:
-    """
-    CLI entry point.
-
-    A wrapper around main function, that setups typer and executes main(...).
-    """
-    return typer.run(_main)
-
-
 if __name__ == "__main__":
-    raise SystemExit(run())  # pragma: no cover
+    raise SystemExit(app())  # pragma: no cover

@@ -1,6 +1,5 @@
-"""All Clicking Strategies should be placed in this folder."""
+"""Clickpy, Automated mouse clicking scripts."""
 
-from .cli import run
-from .clickpy import auto_click
+from .main import app
 
-__all__ = ["run", "auto_click"]
+__all__ = ["app"]
