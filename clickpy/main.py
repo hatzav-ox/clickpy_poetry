@@ -1,6 +1,6 @@
 """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
 
-from typing import Optional
+from typing import Any, Optional
 
 # mypy doesn't like pyautogui, and I can't find its py.types
 import pyautogui  # type: ignore
@@ -50,6 +50,7 @@ def main(
         print("fast_click flag passed in. Using thread.sleep(1), instead of a random interval.")
 
     click_strategy = BasicClickStrategy(sleep_time=sleep_time, print_debug=debug)
+
     while True:
         try:
             auto_click(click_strategy)
