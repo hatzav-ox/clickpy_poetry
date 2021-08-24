@@ -64,4 +64,4 @@ def main(
 
 
 if __name__ == "__main__":
-    raise SystemExit(app())  # pragma: no cover1
+    raise SystemExit(app())  # pragma: no cover

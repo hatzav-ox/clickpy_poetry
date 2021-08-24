@@ -31,7 +31,7 @@ def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(BasicClickStrategy(sleep_time=1))
+    mock_clickpy.assert_called_once_with(BasicClickStrategy(sleep_time=0.5))
     assert call == "Running clickpy. Enter ctrl+c to stop.\n\nBack to work!\n"
     assert err == ""
 
@@ -62,7 +62,7 @@ def test_main_all_options(mocker: MockerFixture, capsys: CaptureFixture) -> None
 
     # Assert
     call, err = capsys.readouterr()
-    mock_clickpy.assert_called_once_with(BasicClickStrategy(print_debug=True, sleep_time=1))
+    mock_clickpy.assert_called_once_with(BasicClickStrategy(print_debug=True, sleep_time=0.5))
     assert (
         call
         == "Running clickpy. Enter ctrl+c to stop.\nfast_click flag passed in. Using thread.sleep(1), instead of a random interval.\n\nKeyboardInterrupt thrown and caught. Exiting script\n"
@@ -70,36 +70,36 @@ def test_main_all_options(mocker: MockerFixture, capsys: CaptureFixture) -> None
     assert err == ""
 
 
-@pytest.mark.skip("WIP")
-def test_run_method(mocker: MockerFixture) -> None:  # noqa
-    # Arrange
-    mock_typer = mocker.patch("clickpy.main.typer.Typer")
+# # @pytest.mark.skip("WIP")
+# def test_run_method(mocker: MockerFixture) -> None:  # noqa
+#     # Arrange
+#     mock_typer = mocker.patch("clickpy.app")
 
-    # Act
-    clickpy.app()
+#     # Act
+#     clickpy.app()
 
-    # Assert
-    mock_typer.assert_called_once_with(clickpy.main.main)
+#     # Assert
+#     mock_typer.assert_called_once_with(clickpy.main.main)
 
 
-@pytest.mark.skip("WIP")
-def test___main__py(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
-    # Arrange
-    mock_typer = mocker.patch("clickpy.main.typer.Typer")
-    spy_run = mocker.spy(clickpy.main, "main")
+# @pytest.mark.skip("WIP")
+# def test___main__py(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
+#     # Arrange
+#     mock_typer = mocker.patch("clickpy.main.typer.Typer")
+#     spy_run = mocker.spy(clickpy.main, "main")
 
-    # Act
-    # use runpy to run python script like an actual script or modules
-    with pytest.raises(SystemExit) as excinfo:
-        runpy.run_module("clickpy", run_name="__main__")
+#     # Act
+#     # use runpy to run python script like an actual script or modules
+#     with pytest.raises(SystemExit) as excinfo:
+#         runpy.run_module("clickpy", run_name="__main__")
 
-    out, err = capsys.readouterr()
-    print(out, err)
-    (retv,) = excinfo.value.args
-    # Assert
-    assert retv == 1
-    mock_typer.assert_called_once()
-    spy_run.assert_called_once()
+#     out, err = capsys.readouterr()
+#     print(out, err)
+#     (retv,) = excinfo.value.args
+#     # Assert
+#     assert retv == 1
+#     mock_typer.assert_called_once()
+#     spy_run.assert_called_once()
 
 
 # @pytest.mark.skip(reason="Can't figure out how to call file __main__ block.")
