@@ -1,6 +1,6 @@
 """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
 
-from typing import Any, Optional
+from typing import Optional
 
 # mypy doesn't like pyautogui, and I can't find its py.types
 import pyautogui  # type: ignore
