@@ -43,7 +43,7 @@ class BasicClickStrategy:
 
     def __click__(self) -> None:
         """
-        Protocol method for SupportsClick.
+        Protocol method defined by SupportsClick.
 
         Process:
         1. Either use the sleep_time passed into the ctr, or get a random int
@@ -70,3 +70,27 @@ class BasicClickStrategy:
 
         if self.print_debug:
             self.echo("... Clicked")
+
+
+@dataclass
+class NaturalClickStrategy:
+    """Click Strategy to replicate a more natural clicking pattern."""
+
+    wait_times: list[float] = [1, 1, 2.5]
+    min_sleep_bound = 5
+    max_sleep_bound = 60
+
+    def __click__(self):
+        """Protocol method defined by SupportsClick.
+
+        Process:
+        Define a list of 'wait times', i.e. time in between clicks.
+        In a loop, click mouse then sleep that iterations wait time.
+        At the end, get a random time between min and max bounds.
+        """
+        for time in self.wait_times:
+            pyautogui.click()
+            sleep(time)
+        else:
+            time = randint(self.min_sleep_bound, self.max_sleep_bound)
+            sleep(time)
