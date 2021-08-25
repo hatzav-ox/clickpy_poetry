@@ -1,9 +1,11 @@
 """All Clicking Strategies should be placed in this folder."""
 
-from dataclasses import dataclass
+import inspect
+import sys
+from dataclasses import dataclass, field
 from random import randint
 from time import sleep
-from typing import Callable, Optional, Protocol, runtime_checkable
+from typing import Any, Callable, Optional, Protocol, Tuple, runtime_checkable
 
 import pyautogui  # type: ignore
 import typer
@@ -76,9 +78,13 @@ class BasicClickStrategy:
 class NaturalClickStrategy:
     """Click Strategy to replicate a more natural clicking pattern."""
 
-    wait_times: list[float] = [1, 1, 2.5]
     min_sleep_bound = 5
     max_sleep_bound = 60
+    wait_times: list[float] = field(default_factory=list)
+
+    def __post_init__(self):
+        """Init list field."""
+        self.wait_times = [1.0, 1.0, 2.5]
 
     def __click__(self):
         """Protocol method defined by SupportsClick.
@@ -94,3 +100,33 @@ class NaturalClickStrategy:
         else:
             time = randint(self.min_sleep_bound, self.max_sleep_bound)
             sleep(time)
+
+
+def get_strategies() -> list[Tuple[str, Any]]:
+    """Get all the ClickStrategy classes in this module."""
+    # this should get all the classes in this module
+    classes = inspect.getmembers(sys.modules[__name__], inspect.isclass)
+
+    # list of classes to remove
+    remove_protocols = [(SupportsClick.__name__, SupportsClick), (Protocol.__name__, Protocol)]
+    for proto in remove_protocols:
+        try:
+            classes.remove(proto)
+        except ValueError:
+            pass
+
+    return classes
+
+
+def pick_click_type(
+    type: Optional[str], fast_click: Optional[float], print_debug: Optional[bool]
+) -> SupportsClick:
+    if not type or fast_click:
+        return BasicClickStrategy(sleep_time=fast_click, print_debug=print_debug)
+
+    strategies = get_strategies()
+    for strat in strategies:
+        if type.lower() in strat[0].lower():
+            return strat[1]()
+    else:
+        return BasicClickStrategy(sleep_time=fast_click, print_debug=print_debug)

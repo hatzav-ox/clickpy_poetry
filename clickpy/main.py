@@ -6,7 +6,7 @@ from typing import Optional
 import pyautogui  # type: ignore
 import typer
 
-from .click_strategy import BasicClickStrategy, SupportsClick
+from .click_strategy import SupportsClick, pick_click_type
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
@@ -40,8 +40,9 @@ app = typer.Typer()
 def main(
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
     fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
+    type: Optional[str] = typer.Option("Basic", "--type", "-t"),
 ) -> int:
-    """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
+    """Clickpy, automated mouse clicking with python."""
     print("Running clickpy. Enter ctrl+c to stop.")
 
     sleep_time = 0.5 if fast_click else None
@@ -49,8 +50,9 @@ def main(
     if debug and fast_click:
         print("fast_click flag passed in. Using thread.sleep(1), instead of a random interval.")
 
-    click_strategy = BasicClickStrategy(sleep_time=sleep_time, print_debug=debug)
+    click_strategy = pick_click_type(type, sleep_time)
 
+    print(click_strategy.__class__)
     while True:
         try:
             auto_click(click_strategy)
