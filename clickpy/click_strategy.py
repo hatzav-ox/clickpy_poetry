@@ -103,7 +103,11 @@ class NaturalClickStrategy:
 
 
 def get_strategies() -> list[Tuple[str, Any]]:
-    """Get all the ClickStrategy classes in this module."""
+    """Get all the ClickStrategy classes in this module.
+
+    Returns:
+        list[Tuple[str, Any]]: [description]
+    """
     # this should get all the classes in this module
     classes = inspect.getmembers(sys.modules[__name__], inspect.isclass)
 
@@ -118,9 +122,19 @@ def get_strategies() -> list[Tuple[str, Any]]:
     return classes
 
 
-def pick_click_type(
+def get_click_strategy(
     type: Optional[str], fast_click: Optional[float], print_debug: Optional[bool]
 ) -> SupportsClick:
+    """Create ClickStrategy based on user input via cli.
+
+    Args:
+        type (Optional[str]): [description]
+        fast_click (Optional[float]): [description]
+        print_debug (Optional[bool]): [description]
+
+    Returns:
+        SupportsClick: [description]
+    """
     if not type or fast_click:
         return BasicClickStrategy(sleep_time=fast_click, print_debug=print_debug)
 

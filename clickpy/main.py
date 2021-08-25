@@ -6,7 +6,7 @@ from typing import Optional
 import pyautogui  # type: ignore
 import typer
 
-from .click_strategy import SupportsClick, pick_click_type
+from .click_strategy import SupportsClick, get_click_strategy
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
@@ -50,7 +50,7 @@ def main(
     if debug and fast_click:
         print("fast_click flag passed in. Using thread.sleep(1), instead of a random interval.")
 
-    click_strategy = pick_click_type(type, sleep_time)
+    click_strategy = get_click_strategy(type, sleep_time, debug)
 
     print(click_strategy.__class__)
     while True:
