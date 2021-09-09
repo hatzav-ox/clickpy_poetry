@@ -5,7 +5,7 @@ import sys
 from dataclasses import dataclass, field
 from random import randint
 from time import sleep
-from typing import Any, Callable, Optional, Protocol, Tuple, runtime_checkable
+from typing import Any, Optional, Protocol, Tuple, runtime_checkable
 
 import pyautogui  # type: ignore
 import typer
@@ -20,12 +20,75 @@ class SupportsClick(Protocol):  # pylint: disable=R0903
     SupportsClick.
     """
 
+    print_debug: Optional[bool]
+
     def __click__(self) -> None:
         """
         Protocol method for the auto_click function.
 
         Any ClickStrategy class should implement a '__click__' method.
         """
+
+    @classmethod
+    def get_simple_name(cls) -> str:
+        """[summary]
+
+        Returns:
+            str: [description]
+        """
+
+
+def _get_strategies() -> list[Tuple[str, Any]]:
+    """Get all the ClickStrategy classes in this module.
+
+    Returns:
+        list[Tuple[str, Any]]: [description]
+    """
+    # this should get all the classes in this module
+    # unfortunately, this will also get the SupportsClick class
+    # this will need to be removed
+    members = inspect.getmembers(sys.modules[__name__], inspect.isclass)
+
+    # list of classes to remove
+    remove_protocols = [(SupportsClick.__name__, SupportsClick), (Protocol.__name__, Protocol)]
+    return [x for x in members if x not in remove_protocols]
+
+
+def get_simple_names() -> list[str]:
+    return [x[1].get_simple_name() for x in _get_strategies()]
+
+
+def get_click_strategy(
+    type: Optional[str], fast_click: Optional[float], print_debug: Optional[bool]
+) -> SupportsClick:
+    """Create ClickStrategy based on user input via cli.
+
+    Args:
+        type (Optional[str]): [description]
+        fast_click (Optional[float]): [description]
+        print_debug (Optional[bool]): [description]
+
+    Returns:
+        SupportsClick: [description]
+    """
+    if not type:
+        return BasicClickStrategy(sleep_time=fast_click, print_debug=print_debug)
+
+    strategies = _get_strategies()
+    for strat in strategies:
+        # Check if name passed in cli matches any of the classes in this module
+        if type.lower() in strat[0].lower():
+            strat_obj = strat[1]()
+            break
+    else:
+        strat_obj = BasicClickStrategy(sleep_time=fast_click)
+
+    if hasattr(strat_obj, "print_debug"):
+        strat_obj.print_debug = print_debug
+
+    # if hasattr(strat_obj, "fast_click"):
+    #     strat_obj.fast_click = fast_click
+    return strat_obj
 
 
 @dataclass
@@ -41,7 +104,6 @@ class BasicClickStrategy:
     max_sleep_bound: int = 180
     sleep_time: Optional[float] = None
     print_debug: Optional[bool] = None
-    echo: Callable[[object], None] = typer.echo
 
     def __click__(self) -> None:
         """
@@ -61,17 +123,21 @@ class BasicClickStrategy:
         )
 
         if self.print_debug and not self.sleep_time:
-            self.echo(f"Random thread sleep for {timer} seconds.")
+            typer.echo(f"Random thread sleep for {timer} seconds.")
 
         if self.print_debug:
-            self.echo("Thread sleeping now...")
+            typer.echo("Thread sleeping now...")
 
         sleep(timer)
 
         pyautogui.click()
 
         if self.print_debug:
-            self.echo("... Clicked")
+            typer.echo("... Clicked")
+
+    @classmethod
+    def get_simple_name(cls) -> str:
+        return cls.__name__.replace("ClickStrategy", "").lower()
 
 
 @dataclass
@@ -80,6 +146,7 @@ class NaturalClickStrategy:
 
     min_sleep_bound = 5
     max_sleep_bound = 60
+    print_debug: Optional[bool] = None
     wait_times: list[float] = field(default_factory=list)
 
     def __post_init__(self):
@@ -101,46 +168,6 @@ class NaturalClickStrategy:
             time = randint(self.min_sleep_bound, self.max_sleep_bound)
             sleep(time)
 
-
-def get_strategies() -> list[Tuple[str, Any]]:
-    """Get all the ClickStrategy classes in this module.
-
-    Returns:
-        list[Tuple[str, Any]]: [description]
-    """
-    # this should get all the classes in this module
-    classes = inspect.getmembers(sys.modules[__name__], inspect.isclass)
-
-    # list of classes to remove
-    remove_protocols = [(SupportsClick.__name__, SupportsClick), (Protocol.__name__, Protocol)]
-    for proto in remove_protocols:
-        try:
-            classes.remove(proto)
-        except ValueError:
-            pass
-
-    return classes
-
-
-def get_click_strategy(
-    type: Optional[str], fast_click: Optional[float], print_debug: Optional[bool]
-) -> SupportsClick:
-    """Create ClickStrategy based on user input via cli.
-
-    Args:
-        type (Optional[str]): [description]
-        fast_click (Optional[float]): [description]
-        print_debug (Optional[bool]): [description]
-
-    Returns:
-        SupportsClick: [description]
-    """
-    if not type or fast_click:
-        return BasicClickStrategy(sleep_time=fast_click, print_debug=print_debug)
-
-    strategies = get_strategies()
-    for strat in strategies:
-        if type.lower() in strat[0].lower():
-            return strat[1]()
-    else:
-        return BasicClickStrategy(sleep_time=fast_click, print_debug=print_debug)
+    @classmethod
+    def get_simple_name(cls) -> str:
+        return cls.__name__.replace("ClickStrategy", "").lower()

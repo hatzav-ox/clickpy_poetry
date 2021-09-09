@@ -6,7 +6,7 @@ from typing import Optional
 import pyautogui  # type: ignore
 import typer
 
-from .click_strategy import SupportsClick, get_click_strategy
+from click_strategy import BasicClickStrategy, SupportsClick, get_click_strategy, get_simple_names
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
@@ -33,26 +33,42 @@ def auto_click(
     click_strategy.__click__()
 
 
+def show_names_list() -> int:
+    typer.echo("Available clicking strategies:\n")
+    for name in get_simple_names():
+        typer.echo(name.replace("ClickStrategy", "").lower())
+    return 0
+
+
 app = typer.Typer()
 
 
 @app.command()
 def main(
+    list: Optional[bool] = typer.Option(None, "--list", "-l"),
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
     fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
-    type: Optional[str] = typer.Option("Basic", "--type", "-t"),
+    strat_type: Optional[str] = typer.Option(BasicClickStrategy.get_simple_name(), "--type", "-t"),
 ) -> int:
     """Clickpy, automated mouse clicking with python."""
-    print("Running clickpy. Enter ctrl+c to stop.")
+    if list:
+        show_names_list()
+        return 0
+
+    typer.echo("Running clickpy. Enter ctrl+c to stop.")
 
     sleep_time = 0.5 if fast_click else None
+    if debug:
+        typer.echo(f"{strat_type=}")
+        if fast_click:
+            typer.echo(
+                f"fast_click flag passed in. default sleep time set to {sleep_time}s, "
+                "instead of a random interval."
+            )
 
-    if debug and fast_click:
-        print("fast_click flag passed in. Using thread.sleep(1), instead of a random interval.")
+    click_strategy = get_click_strategy(strat_type, fast_click=sleep_time, print_debug=debug)
 
-    click_strategy = get_click_strategy(type, sleep_time, debug)
-
-    print(click_strategy.__class__)
+    # print(click_strategy.__class__)
     while True:
         try:
             auto_click(click_strategy)
@@ -60,7 +76,7 @@ def main(
             msg = (
                 "KeyboardInterrupt thrown and caught. Exiting script" if debug else "Back to work!"
             )
-            print(f"\n{msg}")
+            typer.echo(f"\n{msg}")
             break
 
     return 0
