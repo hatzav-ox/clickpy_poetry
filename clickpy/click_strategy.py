@@ -30,12 +30,21 @@ class SupportsClick(Protocol):  # pylint: disable=R0903
         """
 
     @classmethod
-    def get_simple_name(cls) -> str:
-        """[summary]
+    def get_simplified_name(cls) -> str:
+        """Turn classname into a friendly, cli identifiable name.
 
         Returns:
-            str: [description]
+            str: cli friendly class name
         """
+
+
+def get_default_strategy():
+    """Get the default strategy class, not the actual object.
+
+    Returns:
+        Type[BasicClickStrategy]: BasicClickStrategy is the default clicking class.
+    """
+    return BasicClickStrategy
 
 
 def _get_strategies() -> list[Tuple[str, Any]]:
@@ -54,8 +63,13 @@ def _get_strategies() -> list[Tuple[str, Any]]:
     return [x for x in members if x not in remove_protocols]
 
 
-def get_simple_names() -> list[str]:
-    return [x[1].get_simple_name() for x in _get_strategies()]
+def get_simplified_names() -> list[str]:
+    """Get a list of all simplified names for all Clicking Strategies.
+
+    Returns:
+        list[str]: Simplified names of all clicking strategies.
+    """
+    return [x[1].get_simplified_name() for x in _get_strategies()]
 
 
 def get_click_strategy(
@@ -72,7 +86,7 @@ def get_click_strategy(
         SupportsClick: [description]
     """
     if not type:
-        return BasicClickStrategy(sleep_time=fast_click, print_debug=print_debug)
+        return get_default_strategy()(sleep_time=fast_click, print_debug=print_debug)
 
     strategies = _get_strategies()
     for strat in strategies:
@@ -81,7 +95,7 @@ def get_click_strategy(
             strat_obj = strat[1]()
             break
     else:
-        strat_obj = BasicClickStrategy(sleep_time=fast_click)
+        strat_obj = get_default_strategy()(sleep_time=fast_click, print_debug=print_debug)
 
     if hasattr(strat_obj, "print_debug"):
         strat_obj.print_debug = print_debug
@@ -136,7 +150,8 @@ class BasicClickStrategy:
             typer.echo("... Clicked")
 
     @classmethod
-    def get_simple_name(cls) -> str:
+    def get_simplified_name(cls) -> str:
+        """Return 'basic'."""
         return cls.__name__.replace("ClickStrategy", "").lower()
 
 
@@ -169,5 +184,6 @@ class NaturalClickStrategy:
             sleep(time)
 
     @classmethod
-    def get_simple_name(cls) -> str:
+    def get_simplified_name(cls) -> str:
+        """Return 'natural'."""
         return cls.__name__.replace("ClickStrategy", "").lower()

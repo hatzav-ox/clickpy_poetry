@@ -6,7 +6,12 @@ from typing import Optional
 import pyautogui  # type: ignore
 import typer
 
-from click_strategy import BasicClickStrategy, SupportsClick, get_click_strategy, get_simple_names
+from .click_strategy import (
+    SupportsClick,
+    get_click_strategy,
+    get_default_strategy,
+    get_simplified_names,
+)
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
@@ -35,7 +40,7 @@ def auto_click(
 
 def show_names_list() -> int:
     typer.echo("Available clicking strategies:\n")
-    for name in get_simple_names():
+    for name in get_simplified_names():
         typer.echo(name.replace("ClickStrategy", "").lower())
     return 0
 
@@ -48,7 +53,9 @@ def main(
     list: Optional[bool] = typer.Option(None, "--list", "-l"),
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
     fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
-    strat_type: Optional[str] = typer.Option(BasicClickStrategy.get_simple_name(), "--type", "-t"),
+    strat_type: Optional[str] = typer.Option(
+        get_default_strategy().get_simplified_name(), "--type", "-t"
+    ),
 ) -> int:
     """Clickpy, automated mouse clicking with python."""
     if list:
