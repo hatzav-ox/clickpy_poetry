@@ -45,10 +45,6 @@ def print_startegy_names():
         typer.echo(name.replace("ClickStrategy", "").lower())
 
 
-app = typer.Typer()
-
-
-@app.command()
 def main(
     list: Optional[bool] = typer.Option(None, "--list", "-l"),
     debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
@@ -56,11 +52,11 @@ def main(
     strat_type: Optional[str] = typer.Option(
         get_default_strategy().get_simplified_name(), "--type", "-t"
     ),
-) -> int:
+):
     """Clickpy, automated mouse clicking with python."""
     if list:
         print_startegy_names()
-        return 0
+        raise typer.Exit()
 
     typer.echo("Running clickpy. Enter ctrl+c to stop.")
 
@@ -86,8 +82,11 @@ def main(
             typer.echo(f"\n{msg}")
             break
 
-    return 0
+
+def run():
+    """Run typer cli."""
+    typer.run(main)
 
 
 if __name__ == "__main__":
-    raise SystemExit(app())  # pragma: no cover
+    run()  # pragma: no cover

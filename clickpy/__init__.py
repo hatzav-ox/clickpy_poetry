@@ -1,5 +1,5 @@
 """Clickpy, Automated mouse clicking scripts."""
 
-from .main import app
+from .main import run
 
-__all__ = ["app"]
+__all__ = ["run"]
