@@ -38,11 +38,11 @@ def auto_click(
     click_strategy.__click__()
 
 
-def show_names_list() -> int:
+def print_startegy_names():
+    """Get simplified names of all strategies and print them to cli."""
     typer.echo("Available clicking strategies:\n")
     for name in get_simplified_names():
         typer.echo(name.replace("ClickStrategy", "").lower())
-    return 0
 
 
 app = typer.Typer()
@@ -59,7 +59,7 @@ def main(
 ) -> int:
     """Clickpy, automated mouse clicking with python."""
     if list:
-        show_names_list()
+        print_startegy_names()
         return 0
 
     typer.echo("Running clickpy. Enter ctrl+c to stop.")
