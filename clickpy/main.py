@@ -1,19 +1,15 @@
 """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
+from typing import Optional
+
 import pyautogui  # type: ignore # mypy doesn't like pyautogui, and I can't find its py.types
 import typer
 
-from clickpy.auto_clicker import (
-    NO_CLICK_TYPE,
-    ClickStrategyNotFound,
-    auto_click,
-    click_strategy_factory,
-)
+from clickpy.auto_clicker import ClickStrategyNotFound, auto_click, click_strategy_factory
 from clickpy.click_strategy import STRATEGIES
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
 pyautogui.FAILSAFE = False
-DEFAULT_CLICK_TYPE = NO_CLICK_TYPE
 
 
 def print_startegy_names():
@@ -24,7 +20,7 @@ def print_startegy_names():
 
 
 def main(
-    click_type: str = typer.Option(DEFAULT_CLICK_TYPE, "--type", "-t", show_default=False),
+    click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),
     debug: bool = typer.Option(False, "--debug", "-d", show_default=False),
     fast: bool = typer.Option(False, "--fast", "-f", show_default=False),
     list: bool = typer.Option(

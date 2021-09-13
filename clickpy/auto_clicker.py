@@ -28,10 +28,6 @@ def auto_click(
     click_strategy.__click__()
 
 
-# Sentinel value for factory
-NO_CLICK_TYPE = ()
-
-
 def click_strategy_factory(
     click_type: Optional[str] = None, fast: bool = False, debug: bool = False
 ) -> SupportsClick:
