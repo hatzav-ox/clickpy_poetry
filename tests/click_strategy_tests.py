@@ -1,9 +1,23 @@
-from clickpy.click_strategy import *
+import inspect
+import sys
+from typing import Protocol
+
+import clickpy.click_strategy as ccs
 
 
-def test_get_classes_returns_tuples_of_click_strategy_classes():  # noqa
-    classes = get_strategies()
+def test_all_strats_in_STRATEGIES_dict():
+    """Make sure STRATEGIES dict is always up-to-date."""
+    members = inspect.getmembers(ccs, inspect.isclass)
+    remove_types = [(ccs.SupportsClick.__name__, ccs.SupportsClick), (Protocol.__name__, Protocol)]
 
-    assert (SupportsClick.__name__, SupportsClick) not in classes
-    assert (BasicClickStrategy.__name__, BasicClickStrategy) in classes
-    assert (NaturalClickStrategy.__name__, NaturalClickStrategy) in classes
+    for rm in remove_types:
+        assert rm in members
+        members.remove(rm)
+
+    # All classes (besides base protocol) should be in this dict
+    assert len(members) == len(ccs.STRATEGIES)
+
+    for member in members:
+        cli_name = member[1].to_cli_string()
+        assert cli_name in ccs.STRATEGIES
+        assert ccs.STRATEGIES[cli_name] == member[1]

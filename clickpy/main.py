@@ -1,86 +1,62 @@
 """Auto Mouse clickpy Script. Make it look like your still online with Python Automation."""
-
-from typing import Optional
-
-# mypy doesn't like pyautogui, and I can't find its py.types
-import pyautogui  # type: ignore
+import pyautogui  # type: ignore # mypy doesn't like pyautogui, and I can't find its py.types
 import typer
 
-from .click_strategy import (
-    SupportsClick,
-    get_click_strategy,
-    get_default_strategy,
-    get_simplified_names,
+from clickpy.auto_clicker import (
+    NO_CLICK_TYPE,
+    ClickStrategyNotFound,
+    auto_click,
+    click_strategy_factory,
 )
+from clickpy.click_strategy import STRATEGIES
 
 # Disable FailSafeException when mouse is in screen corners.
 # I don't need a failsafe for this script.
 pyautogui.FAILSAFE = False
-
-
-def auto_click(
-    click_strategy: SupportsClick,
-) -> None:
-    """
-    Call `__click__` method of the object passed in.
-
-    Args:
-    click_strategy (SupportsClick): Should be a ClickStrategy object.
-
-    Raises:
-    TypeError: Error raised if click_strategy is not a structural subtype of SupportClicks,
-    """
-    if not isinstance(click_strategy, SupportsClick):
-        raise TypeError(
-            f"Argument passed in of type {type(click_strategy)} does not implement"
-            f" {SupportsClick.__name__}"
-        )
-    click_strategy.__click__()
+DEFAULT_CLICK_TYPE = NO_CLICK_TYPE
 
 
 def print_startegy_names():
     """Get simplified names of all strategies and print them to cli."""
     typer.echo("Available clicking strategies:\n")
-    for name in get_simplified_names():
-        typer.echo(name.replace("ClickStrategy", "").lower())
+    for name in STRATEGIES.keys():
+        typer.echo(name)
 
 
 def main(
-    list: Optional[bool] = typer.Option(None, "--list", "-l"),
-    debug: Optional[bool] = typer.Option(None, "--debug", "-d"),
-    fast_click: Optional[bool] = typer.Option(None, "--fast-click", "-f"),
-    strat_type: Optional[str] = typer.Option(
-        get_default_strategy().get_simplified_name(), "--type", "-t"
+    click_type: str = typer.Option(DEFAULT_CLICK_TYPE, "--type", "-t", show_default=False),
+    debug: bool = typer.Option(False, "--debug", "-d", show_default=False),
+    fast: bool = typer.Option(False, "--fast", "-f", show_default=False),
+    list: bool = typer.Option(
+        False,
+        "--list",
+        "-l",
+        help="Print a list of all available clicking strategies.",
+        show_default=False,
     ),
 ):
     """Clickpy, automated mouse clicking with python."""
-    if list:
-        print_startegy_names()
-        raise typer.Exit()
+    try:
+        if list:
+            print_startegy_names()
+            raise typer.Exit()
 
-    typer.echo("Running clickpy. Enter ctrl+c to stop.")
+        typer.echo("Running clickpy. Enter ctrl+c to stop.")
 
-    sleep_time = 0.5 if fast_click else None
-    if debug:
-        typer.echo(f"{strat_type=}")
-        if fast_click:
-            typer.echo(
-                f"fast_click flag passed in. default sleep time set to {sleep_time}s, "
-                "instead of a random interval."
-            )
-
-    click_strategy = get_click_strategy(strat_type, fast_click=sleep_time, print_debug=debug)
-
-    # print(click_strategy.__class__)
-    while True:
-        try:
+        click_strategy = click_strategy_factory(click_type, fast=fast, debug=debug)
+        if debug:
+            typer.echo(f"Using clicker type: {click_strategy.to_cli_string()}")
+        while True:
             auto_click(click_strategy)
-        except KeyboardInterrupt:
-            msg = (
-                "KeyboardInterrupt thrown and caught. Exiting script" if debug else "Back to work!"
-            )
-            typer.echo(f"\n{msg}")
-            break
+
+    except ClickStrategyNotFound:
+        typer.echo(f"{click_type} is not a valid clicker type.")
+        print_startegy_names()
+        raise typer.Exit(code=1)
+
+    except KeyboardInterrupt:
+        msg = "KeyboardInterrupt thrown and caught. Exiting script" if debug else "Back to work!"
+        typer.echo(f"\n{msg}")
 
 
 def run():

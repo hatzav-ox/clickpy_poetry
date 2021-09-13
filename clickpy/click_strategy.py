@@ -1,18 +1,14 @@
 """All Clicking Strategies should be placed in this folder."""
-
-import inspect
-import sys
-from dataclasses import dataclass, field
 from random import randint
 from time import sleep
-from typing import Any, Optional, Protocol, Tuple, runtime_checkable
+from typing import Optional, Protocol, runtime_checkable
 
 import pyautogui  # type: ignore
 import typer
 
 
 @runtime_checkable
-class SupportsClick(Protocol):  # pylint: disable=R0903
+class SupportsClick(Protocol):
     """
     Definition of SupportsClick Protocol.
 
@@ -20,7 +16,7 @@ class SupportsClick(Protocol):  # pylint: disable=R0903
     SupportsClick.
     """
 
-    print_debug: Optional[bool]
+    debug: Optional[bool]
 
     def __click__(self) -> None:
         """
@@ -30,7 +26,7 @@ class SupportsClick(Protocol):  # pylint: disable=R0903
         """
 
     @classmethod
-    def get_simplified_name(cls) -> str:
+    def to_cli_string(cls) -> str:
         """Turn classname into a friendly, cli identifiable name.
 
         Returns:
@@ -38,74 +34,6 @@ class SupportsClick(Protocol):  # pylint: disable=R0903
         """
 
 
-def get_default_strategy():
-    """Get the default strategy class, not the actual object.
-
-    Returns:
-        Type[BasicClickStrategy]: BasicClickStrategy is the default clicking class.
-    """
-    return BasicClickStrategy
-
-
-def _get_strategies() -> list[Tuple[str, Any]]:
-    """Get all the ClickStrategy classes in this module.
-
-    Returns:
-        list[Tuple[str, Any]]: [description]
-    """
-    # this should get all the classes in this module
-    # unfortunately, this will also get the SupportsClick class
-    # this will need to be removed
-    members = inspect.getmembers(sys.modules[__name__], inspect.isclass)
-
-    # list of classes to remove
-    remove_protocols = [(SupportsClick.__name__, SupportsClick), (Protocol.__name__, Protocol)]
-    return [x for x in members if x not in remove_protocols]
-
-
-def get_simplified_names() -> list[str]:
-    """Get a list of all simplified names for all Clicking Strategies.
-
-    Returns:
-        list[str]: Simplified names of all clicking strategies.
-    """
-    return [x[1].get_simplified_name() for x in _get_strategies()]
-
-
-def get_click_strategy(
-    type: Optional[str], fast_click: Optional[float], print_debug: Optional[bool]
-) -> SupportsClick:
-    """Create ClickStrategy based on user input via cli.
-
-    Args:
-        type (Optional[str]): [description]
-        fast_click (Optional[float]): [description]
-        print_debug (Optional[bool]): [description]
-
-    Returns:
-        SupportsClick: [description]
-    """
-    if not type:
-        return get_default_strategy()(sleep_time=fast_click, print_debug=print_debug)
-
-    strategies = _get_strategies()
-    for strat in strategies:
-        # Check if name passed in cli matches any of the classes in this module
-        if type.lower() in strat[0].lower():
-            strat_obj = strat[1]()
-            break
-    else:
-        strat_obj = get_default_strategy()(sleep_time=fast_click, print_debug=print_debug)
-
-    if hasattr(strat_obj, "print_debug"):
-        strat_obj.print_debug = print_debug
-
-    # if hasattr(strat_obj, "fast_click"):
-    #     strat_obj.fast_click = fast_click
-    return strat_obj
-
-
-@dataclass
 class BasicClickStrategy:
     """The first, very basic clicking strategy I came up with.
 
@@ -114,10 +42,12 @@ class BasicClickStrategy:
     Else, it will generate a random number between 1 and 180 (3 minutes).
     """
 
-    min_sleep_bound: int = 1
-    max_sleep_bound: int = 180
-    sleep_time: Optional[float] = None
-    print_debug: Optional[bool] = None
+    def __init__(self, **kwargs):
+        """Init fields."""
+        self.debug = kwargs.get("debug")
+        self.sleep_time = 0.5 if kwargs.get("fast") else None
+        self._min_sleep_bound: int = 1
+        self._max_sleep_bound: int = 180
 
     def __click__(self) -> None:
         """
@@ -133,40 +63,37 @@ class BasicClickStrategy:
         timer = (
             self.sleep_time
             if self.sleep_time
-            else float(randint(self.min_sleep_bound, self.max_sleep_bound))
+            else float(randint(self._min_sleep_bound, self._max_sleep_bound))
         )
 
-        if self.print_debug and not self.sleep_time:
+        if self.debug and not self.sleep_time:
             typer.echo(f"Random thread sleep for {timer} seconds.")
 
-        if self.print_debug:
+        if self.debug:
             typer.echo("Thread sleeping now...")
 
         sleep(timer)
 
         pyautogui.click()
 
-        if self.print_debug:
+        if self.debug:
             typer.echo("... Clicked")
 
     @classmethod
-    def get_simplified_name(cls) -> str:
-        """Return 'basic'."""
+    def to_cli_string(cls):
+        """Returns 'basic'."""
         return cls.__name__.replace("ClickStrategy", "").lower()
 
 
-@dataclass
 class NaturalClickStrategy:
     """Click Strategy to replicate a more natural clicking pattern."""
 
-    min_sleep_bound = 5
-    max_sleep_bound = 60
-    print_debug: Optional[bool] = None
-    wait_times: list[float] = field(default_factory=list)
-
-    def __post_init__(self):
-        """Init list field."""
-        self.wait_times = [1.0, 1.0, 2.5]
+    def __init__(self, **kwargs):
+        """Init fields."""
+        self.debug = kwargs.get("debug")
+        self._min_sleep_bound = 5
+        self._max_sleep_bound = 60
+        self.wait_times = [1.0, 1.0, 2.5, randint(self._min_sleep_bound, self._max_sleep_bound)]
 
     def __click__(self):
         """Protocol method defined by SupportsClick.
@@ -177,13 +104,19 @@ class NaturalClickStrategy:
         At the end, get a random time between min and max bounds.
         """
         for time in self.wait_times:
+            if self.debug:
+                typer.echo(f"Waiting for {time} sec ...")
+            sleep(time)
             pyautogui.click()
-            sleep(time)
-        else:
-            time = randint(self.min_sleep_bound, self.max_sleep_bound)
-            sleep(time)
+            if self.debug:
+                typer.echo("... Clicked")
 
     @classmethod
-    def get_simplified_name(cls) -> str:
-        """Return 'natural'."""
+    def to_cli_string(cls):
         return cls.__name__.replace("ClickStrategy", "").lower()
+
+
+STRATEGIES = {
+    BasicClickStrategy.to_cli_string(): BasicClickStrategy,
+    NaturalClickStrategy.to_cli_string(): NaturalClickStrategy,
+}
