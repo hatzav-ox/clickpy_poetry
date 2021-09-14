@@ -39,9 +39,10 @@ def main(
 
         typer.echo("Running clickpy. Enter ctrl+c to stop.")
 
-        click_strategy = click_strategy_factory(click_type, fast=fast, debug=debug)
+        click_strategy = click_strategy_factory(click_type=click_type, fast=fast, debug=debug)
         if debug:
             typer.echo(f"Using clicker type: {click_strategy.to_cli_string()}")
+
         while True:
             auto_click(click_strategy)
 

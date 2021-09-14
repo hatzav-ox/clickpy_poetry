@@ -3,7 +3,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-from clickpy.click_strategy import BasicClickStrategy, SupportsClick
+from clickpy.click_strategy import BasicClickStrategy, ClickProtocol
 from clickpy.main import auto_click
 
 
@@ -42,5 +42,5 @@ def test_auto_click_throws_type_error_if_arg_not_SupportsClick_subtype():  # noq
     assert excinfo.type is TypeError
     assert (
         excinfo.value.args[0] == f"Argument passed in of type {type(None)} does not implement"
-        f" {SupportsClick.__name__}"
+        f" {ClickProtocol.__name__}"
     )

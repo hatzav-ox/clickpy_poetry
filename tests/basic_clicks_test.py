@@ -1,12 +1,12 @@
 # noqa
 
-from clickpy.click_strategy import BasicClickStrategy, SupportsClick
+from clickpy.click_strategy import BasicClickStrategy, ClickProtocol
 from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 
 
 def test_BasicClickStrategy_is_SupportsClick():  # noqa
-    assert isinstance(BasicClickStrategy(), SupportsClick)
+    assert isinstance(BasicClickStrategy(), ClickProtocol)
 
 
 def test_BasicClickStrategy_uses_passed_in_sleep_time(mocker: MockerFixture):  # noqa
@@ -38,7 +38,7 @@ def test_BasicClickStrategy_uses_randint_when_sleep_time_is_none(mocker: MockerF
 
     # Assert
     assert basic_click.sleep_time is None
-    mock_randint.assert_called_once_with(basic_click.min_sleep_bound, basic_click.max_sleep_bound)
+    mock_randint.assert_called_once_with(basic_click._min_sleep_bound, basic_click._max_sleep_bound)
     mock_sleep.assert_called_once_with(sleep_time)
     mock_gui_click.assert_called_once()
 

@@ -1,18 +1,22 @@
+"""Unit tests for Click Strategy Module."""
+
 import inspect
-import sys
 from typing import Protocol
 
 import clickpy.click_strategy as ccs
+from clickpy.exception import ClickStrategyNotFound
 
 
 def test_all_strats_in_STRATEGIES_dict():
     """Make sure STRATEGIES dict is always up-to-date."""
     members = inspect.getmembers(ccs, inspect.isclass)
-    remove_types = [(ccs.SupportsClick.__name__, ccs.SupportsClick), (Protocol.__name__, Protocol)]
+    remove_types = [
+        (ccs.ClickProtocol.__name__, ccs.ClickProtocol),
+        (Protocol.__name__, Protocol),
+        (ClickStrategyNotFound.__name__, ClickStrategyNotFound),
+    ]
 
-    for rm in remove_types:
-        assert rm in members
-        members.remove(rm)
+    members = list(filter(lambda x: x not in remove_types, members))
 
     # All classes (besides base protocol) should be in this dict
     assert len(members) == len(ccs.STRATEGIES)
