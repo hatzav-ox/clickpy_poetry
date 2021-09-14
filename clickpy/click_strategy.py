@@ -6,9 +6,11 @@ from typing import Optional, Protocol, runtime_checkable
 import pyautogui  # type: ignore
 import typer
 
+from clickpy.exception import ClickStrategyNotFound
+
 
 @runtime_checkable
-class SupportsClick(Protocol):
+class ClickProtocol(Protocol):
     """
     Definition of SupportsClick Protocol.
 
@@ -32,6 +34,56 @@ class SupportsClick(Protocol):
         Returns:
             str: cli friendly class name
         """
+
+
+def auto_click(
+    click_strategy: ClickProtocol,
+) -> None:
+    """
+    Call `__click__` method of the object passed in.
+
+    Args:
+    click_strategy (SupportsClick): Should be a ClickStrategy object.
+
+    Raises:
+    TypeError: Error raised if click_strategy is not a structural subtype of SupportClicks,
+    """
+    if not isinstance(click_strategy, ClickProtocol):
+        raise TypeError(
+            f"Argument passed in of type {type(click_strategy)} does not implement"
+            f" {ClickProtocol.__name__}"
+        )
+    click_strategy.__click__()
+
+
+def click_strategy_factory(
+    click_type: Optional[str] = None, fast: bool = False, debug: bool = False
+) -> ClickProtocol:
+    """Create ClickStrategy based on cli inputs.
+
+    Raises:
+        ClickStrategyNotFound: if click_type arg does not match any known ClickStrategy.
+
+    Returns:
+        SupportsClick: ClickStrategy object that implements SupportsClick protocol.
+    """
+    if debug:
+        typer.echo(f"{click_type=}")
+        if fast:
+            pass
+            # typer.echo(
+            #     f"fast_click flag passed in. default sleep time set to {sleep_time}s, "
+            #     "instead of a random interval."
+            # )
+    # using this syntax, instead of not click_type, beacuse users can enter an empty string
+    # empty strings should throw an Exception
+    if click_type is None:
+        return BasicClickStrategy(debug=debug, fast=fast)
+
+    try:
+        return STRATEGIES[click_type](debug=debug, fast=fast)  # type: ignore
+    except KeyError:
+        raise ClickStrategyNotFound()
 
 
 class BasicClickStrategy:
@@ -81,7 +133,7 @@ class BasicClickStrategy:
 
     @classmethod
     def to_cli_string(cls):
-        """Returns 'basic'."""
+        """Return 'basic'."""
         return cls.__name__.replace("ClickStrategy", "").lower()
 
 
@@ -113,10 +165,11 @@ class NaturalClickStrategy:
 
     @classmethod
     def to_cli_string(cls):
+        """Return 'natural'."""
         return cls.__name__.replace("ClickStrategy", "").lower()
 
 
-STRATEGIES = {
+STRATEGIES: dict[str, type[ClickProtocol]] = {
     BasicClickStrategy.to_cli_string(): BasicClickStrategy,
     NaturalClickStrategy.to_cli_string(): NaturalClickStrategy,
 }
