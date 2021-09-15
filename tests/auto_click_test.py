@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from clickpy.click_strategy import BasicClickStrategy, ClickProtocol
-from clickpy.main import auto_click
+from clickpy import auto_click
 
 
 def test_auto_click_works():  # noqa
@@ -25,9 +25,10 @@ def test_auto_click_structural_subtyping_works() -> None:  # noqa
         name = "SomeObj"
 
     some_obj = SomeObj()
-    mock_func = MagicMock(return_value=None, name="__click__")
-    setattr(some_obj, "__click__", mock_func)
-
+    mock_click = MagicMock(return_value=None, name="__click__")
+    setattr(some_obj, "__click__", mock_click)
+    setattr(some_obj, "debug", False)
+    setattr(some_obj, "to_cli_string", MagicMock(return_value="str", name="to_cli_string"))
     # Act
     auto_click(some_obj)  # type: ignore
 

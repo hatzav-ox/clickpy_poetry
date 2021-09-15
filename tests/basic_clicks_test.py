@@ -9,19 +9,18 @@ def test_BasicClickStrategy_is_SupportsClick():  # noqa
     assert isinstance(BasicClickStrategy(), ClickProtocol)
 
 
-def test_BasicClickStrategy_uses_passed_in_sleep_time(mocker: MockerFixture):  # noqa
+def test_BasicClickStrategy_sets_fast_sleep_time(mocker: MockerFixture):  # noqa
     # Arrange
     mock_sleep = mocker.patch("clickpy.click_strategy.sleep")
     mock_gui_click = mocker.patch("clickpy.click_strategy.pyautogui.click")
-    sleep_time = 3
 
     # Act
-    basic_click = BasicClickStrategy(sleep_time=sleep_time)
+    basic_click = BasicClickStrategy(fast=True)
     basic_click.__click__()
 
     # Assert
-    assert basic_click.sleep_time == sleep_time
-    mock_sleep.assert_called_once_with(sleep_time)
+    assert basic_click.sleep_time == 0.5
+    mock_sleep.assert_called_once_with(0.5)
     mock_gui_click.assert_called_once()
 
 
@@ -47,22 +46,21 @@ def test_BasicClickStrategy_prints_stdout_when_print_debug_is_True(
     mocker: MockerFixture, capsys: CaptureFixture
 ):  # noqa
     # Arrange
-    sleep_time = 1
-
     mock_sleep = mocker.patch("clickpy.click_strategy.sleep")
     mock_gui_click = mocker.patch("clickpy.click_strategy.pyautogui.click")
 
     # Act
-    basic_click = BasicClickStrategy(sleep_time=sleep_time, print_debug=True)
+    basic_click = BasicClickStrategy(fast=True, debug=True)
     basic_click.__click__()
 
     out, err = capsys.readouterr()
 
     # Assert
-    assert basic_click.sleep_time is sleep_time
+    assert basic_click.sleep_time == 0.5
+    assert basic_click.debug is True
     assert out == f"Thread sleeping now...\n... Clicked\n"
     assert err == ""
-    mock_sleep.assert_called_once_with(sleep_time)
+    mock_sleep.assert_called_once_with(0.5)
     mock_gui_click.assert_called_once()
 
 
@@ -76,7 +74,7 @@ def test_BasicClickStrategy_prints_random_time_when_sleep_time_is_None(
     mock_gui_click = mocker.patch("clickpy.click_strategy.pyautogui.click")
 
     # Act
-    basic_click = BasicClickStrategy(print_debug=True)
+    basic_click = BasicClickStrategy(debug=True)
     basic_click.__click__()
 
     out, err = capsys.readouterr()
@@ -88,6 +86,7 @@ def test_BasicClickStrategy_prints_random_time_when_sleep_time_is_None(
         == f"Random thread sleep for {sleep_time} seconds.\nThread sleeping now...\n... Clicked\n"
     )
     assert err == ""
-    mock_randint.assert_called_once_with(basic_click.min_sleep_bound, basic_click.max_sleep_bound)
+    assert basic_click.debug is True
+    mock_randint.assert_called_once_with(basic_click._min_sleep_bound, basic_click._max_sleep_bound)
     mock_sleep.assert_called_once_with(sleep_time)
     mock_gui_click.assert_called_once()

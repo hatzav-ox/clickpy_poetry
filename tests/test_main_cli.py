@@ -1,7 +1,9 @@
 """Unit tests for main module."""
 import runpy
+from typing import Tuple
+from unittest.mock import MagicMock
 
-import clickpy.main
+import clickpy
 import typer
 from clickpy.click_strategy import BasicClickStrategy
 from pytest import CaptureFixture
@@ -9,16 +11,30 @@ from pytest_mock import MockerFixture
 from typer.testing import CliRunner
 
 app = typer.Typer()
-app.command()(clickpy.main.main)
+app.command()(clickpy.main)
 
 runner = CliRunner()
 
 
+# Helper Functions
+def make_and_mock_basic_click(
+    mocker: MockerFixture, fast=False, debug=False
+) -> Tuple[BasicClickStrategy, MagicMock]:
+    basic_click = BasicClickStrategy(fast=fast, debug=debug)
+
+    return (
+        basic_click,
+        mocker.patch("clickpy.click_strategy_factory", return_value=basic_click),
+    )
+
+
+# Tests
+
+
 def test_main_no_options(mocker: MockerFixture) -> None:  # noqa
     # Arrange
-    basic_strat = BasicClickStrategy()
-    mock_factory = mocker.patch("clickpy.main.click_strategy_factory", return_value=basic_strat)
-    mock_clickpy = mocker.patch("clickpy.main.auto_click", side_effect=KeyboardInterrupt)
+    basic_strat, mock_factory = make_and_mock_basic_click(mocker)
+    mock_clickpy = mocker.patch("clickpy.auto_click", side_effect=KeyboardInterrupt)
 
     # Act
     result = runner.invoke(app)
@@ -28,18 +44,18 @@ def test_main_no_options(mocker: MockerFixture) -> None:  # noqa
     mock_clickpy.assert_called_once_with(basic_strat)
 
 
-# def test_main_fast_click_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
-#     # Arrange
-#     mock_clickpy = mocker.patch("clickpy.main.auto_click", side_effect=KeyboardInterrupt)
+def test_main_fast_click_option(mocker: MockerFixture) -> None:  # noqa
+    # Arrange
+    basic_click, mock_factory = make_and_mock_basic_click(mocker, fast=True)
+    mock_click = mocker.patch("clickpy.auto_click", side_effect=KeyboardInterrupt)
 
-#     # Act
-#     clickpy.main.main(fast_click=True, debug=None)
+    # Act
+    # clickpy.main.main(fast=True, debug=False)
+    result = runner.invoke(app)
 
-#     # Assert
-#     call, err = capsys.readouterr()
-#     mock_clickpy.assert_called_once_with(BasicClickStrategy(sleep_time=0.5))
-#     assert call == "Running clickpy. Enter ctrl+c to stop.\n\nBack to work!\n"
-#     assert err == ""
+    # Assert
+    mock_factory.assert_called_once_with(click_type=None, fast=False, debug=False)
+    mock_click.assert_called_once_with(basic_click)
 
 
 # def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
