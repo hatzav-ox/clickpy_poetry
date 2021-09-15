@@ -19,13 +19,17 @@ runner = CliRunner()
 # Helper Functions
 def _make_and_mock_basic_click(
     mocker: MockerFixture, fast=False, debug=False
-) -> Tuple[BasicClickStrategy, MagicMock]:
-    """Create a basic click object and factory mock."""
-    basic_click = BasicClickStrategy(fast=fast, debug=debug)
+) -> Tuple[BasicClickStrategy, MagicMock, MagicMock]:
+    """Create a basic click object and factory mock.
 
+    Returns:
+        (BasicClickStrategy, Mock for factory, Mock for auto_click)
+    """
+    basic_click = BasicClickStrategy(fast=fast, debug=debug)
     return (
         basic_click,
         mocker.patch("clickpy.click_strategy_factory", return_value=basic_click),
+        mocker.patch("clickpy.auto_click", side_effect=KeyboardInterrupt),
     )
 
 
@@ -34,21 +38,19 @@ def _make_and_mock_basic_click(
 
 def test_main_no_options(mocker: MockerFixture) -> None:  # noqa
     # Arrange
-    basic_strat, mock_factory = _make_and_mock_basic_click(mocker)
-    mock_clickpy = mocker.patch("clickpy.auto_click", side_effect=KeyboardInterrupt)
+    basic_strat, mock_factory, mock_clicker = _make_and_mock_basic_click(mocker)
 
     # Act
     result = runner.invoke(app)
 
     # Assert
     mock_factory.assert_called_once_with(click_type=None, fast=False, debug=False)
-    mock_clickpy.assert_called_once_with(basic_strat)
+    mock_clicker.assert_called_once_with(basic_strat)
 
 
 def test_main_fast_click_option(mocker: MockerFixture) -> None:  # noqa
     # Arrange
-    basic_click, mock_factory = _make_and_mock_basic_click(mocker, fast=True)
-    mock_click = mocker.patch("clickpy.auto_click", side_effect=KeyboardInterrupt)
+    basic_click, mock_factory, mock_clicker = _make_and_mock_basic_click(mocker, fast=True)
 
     # Act
     # clickpy.main.main(fast=True, debug=False)
@@ -56,7 +58,7 @@ def test_main_fast_click_option(mocker: MockerFixture) -> None:  # noqa
 
     # Assert
     mock_factory.assert_called_once_with(click_type=None, fast=False, debug=False)
-    mock_click.assert_called_once_with(basic_click)
+    mock_clicker.assert_called_once_with(basic_click)
 
 
 # def test_main_print_debug_option(mocker: MockerFixture, capsys: CaptureFixture) -> None:  # noqa
