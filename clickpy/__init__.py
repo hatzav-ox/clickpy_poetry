@@ -2,15 +2,10 @@
 
 from typing import Optional
 
-import pyautogui  # type: ignore # mypy doesn't like pyautogui, and I can't find its py.types
 import typer
 
 from clickpy.click_strategy import STRATEGIES, auto_click, click_strategy_factory
 from clickpy.exception import ClickStrategyNotFound
-
-# Disable FailSafeException when mouse is in screen corners.
-# I don't need a failsafe for this script.
-pyautogui.FAILSAFE = False
 
 
 def print_startegy_names():

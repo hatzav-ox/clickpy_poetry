@@ -3,10 +3,14 @@ from random import randint
 from time import sleep
 from typing import Optional, Protocol, runtime_checkable
 
-import pyautogui  # type: ignore
+import pyautogui  # type: ignore # mypy doesn't like pyautogui, and I can't find its py.types
 import typer
 
 from clickpy.exception import ClickStrategyNotFound
+
+# Disable FailSafeException when mouse is in screen corners.
+# I don't need a failsafe for this script.
+pyautogui.FAILSAFE = False
 
 
 @runtime_checkable

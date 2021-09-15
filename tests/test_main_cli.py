@@ -17,9 +17,10 @@ runner = CliRunner()
 
 
 # Helper Functions
-def make_and_mock_basic_click(
+def _make_and_mock_basic_click(
     mocker: MockerFixture, fast=False, debug=False
 ) -> Tuple[BasicClickStrategy, MagicMock]:
+    """Create a basic click object and factory mock."""
     basic_click = BasicClickStrategy(fast=fast, debug=debug)
 
     return (
@@ -33,7 +34,7 @@ def make_and_mock_basic_click(
 
 def test_main_no_options(mocker: MockerFixture) -> None:  # noqa
     # Arrange
-    basic_strat, mock_factory = make_and_mock_basic_click(mocker)
+    basic_strat, mock_factory = _make_and_mock_basic_click(mocker)
     mock_clickpy = mocker.patch("clickpy.auto_click", side_effect=KeyboardInterrupt)
 
     # Act
@@ -46,7 +47,7 @@ def test_main_no_options(mocker: MockerFixture) -> None:  # noqa
 
 def test_main_fast_click_option(mocker: MockerFixture) -> None:  # noqa
     # Arrange
-    basic_click, mock_factory = make_and_mock_basic_click(mocker, fast=True)
+    basic_click, mock_factory = _make_and_mock_basic_click(mocker, fast=True)
     mock_click = mocker.patch("clickpy.auto_click", side_effect=KeyboardInterrupt)
 
     # Act
