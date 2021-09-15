@@ -10,7 +10,7 @@ from clickpy.exception import ClickStrategyNotFound
 
 def print_startegy_names():
     """Get simplified names of all strategies and print them to stdout."""
-    typer.echo("Available clicking strategies:\n")
+    typer.echo("Available click types:\n")
     for name in STRATEGIES.keys():
         typer.echo(name)
 
@@ -30,11 +30,14 @@ def main(
     """Clickpy, Automated mouse clicking with python."""
     try:
         if debug:
-            typer.echo("Argument list:")
-            typer.echo(f"{debug=}")
-            typer.echo(f"{fast=}")
-            typer.echo(f"{list_clicks=}")
-            typer.echo(f"{click_type=}")
+            typer.echo(
+                f"""Argument list:
+{debug=}
+{fast=}
+{list_clicks=}
+{click_type=}
+"""
+            )
 
         if list_clicks:
             print_startegy_names()
