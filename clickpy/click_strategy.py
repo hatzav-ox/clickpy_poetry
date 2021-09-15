@@ -53,10 +53,7 @@ def auto_click(
     TypeError: Error raised if click_strategy is not a structural subtype of SupportClicks,
     """
     if not isinstance(click_strategy, ClickProtocol):
-        raise TypeError(
-            f"Argument passed in of type {type(click_strategy)} does not implement"
-            f" {ClickProtocol.__name__}"
-        )
+        raise TypeError(f"Argument passed in does not implement" f" {ClickProtocol.__name__}")
     click_strategy.__click__()
 
 
@@ -84,8 +81,9 @@ def click_strategy_factory(
     if click_type is None:
         return BasicClickStrategy(debug=debug, fast=fast)
 
+    cleaned_type = click_type.strip().lower()
     try:
-        return STRATEGIES[click_type](debug=debug, fast=fast)  # type: ignore
+        return STRATEGIES[cleaned_type](debug=debug, fast=fast)  # type: ignore
     except KeyError:
         raise ClickStrategyNotFound()
 

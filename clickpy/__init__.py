@@ -16,42 +16,52 @@ def print_startegy_names():
 
 
 def main(
-    click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),
     debug: bool = typer.Option(False, "--debug", "-d", show_default=False),
     fast: bool = typer.Option(False, "--fast", "-f", show_default=False),
-    list: bool = typer.Option(
+    list_clicks: bool = typer.Option(
         False,
         "--list",
         "-l",
         help="Print a list of all available clicking strategies.",
         show_default=False,
     ),
+    click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),
 ):
     """Clickpy, Automated mouse clicking with python."""
     try:
-        if list:
+        if debug:
+            typer.echo("Argument list:")
+            typer.echo(f"{debug=}")
+            typer.echo(f"{fast=}")
+            typer.echo(f"{list_clicks=}")
+            typer.echo(f"{click_type=}")
+
+        if list_clicks:
             print_startegy_names()
             raise typer.Exit()
 
-        typer.echo("Running clickpy. Enter ctrl+c to stop.")
-
         click_strategy = click_strategy_factory(click_type=click_type, fast=fast, debug=debug)
-        if debug:
-            typer.echo(f"Using clicker type: {click_strategy.to_cli_string()}")
+
+        message = (
+            "Running clickpy. Enter ctrl+c to stop."
+            if not debug
+            else f"Using clicker type: {click_strategy.to_cli_string()}"
+        )
+        typer.echo(message)
 
         while True:
             auto_click(click_strategy)
 
     except ClickStrategyNotFound:
-        typer.echo(f"{click_type} is not a valid clicker type.")
+        typer.echo(f"Argument {click_type!r} is not a valid clicker type.")
         print_startegy_names()
         raise typer.Exit(code=1)
 
     except KeyboardInterrupt:
-        msg = "KeyboardInterrupt thrown and caught. Exiting script" if debug else "Back to work!"
+        msg = "KeyboardInterrupt thrown and caught. Exiting script." if debug else "Back to work!"
         typer.echo(f"\n{msg}")
 
 
 def run():
     """Run clickpy cli with typer."""
-    typer.run(main)
+    typer.run(main)  # pragma: no cover
