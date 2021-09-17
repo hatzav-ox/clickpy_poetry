@@ -36,7 +36,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 clickpy = "clickpy:run"
-test = "test:run"
+test = "tests:run"
 tests = "tests:run"
 cov = "tests:coverage"
 

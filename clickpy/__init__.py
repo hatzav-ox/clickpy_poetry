@@ -15,17 +15,20 @@ def print_startegy_names():
         typer.echo(name)
 
 
+# It's okay to use function calls here, because main should only be called once
+# per exceution. But the values will be parsed of typer.Option will be parsed on
+# the first pass.
 def main(
-    debug: bool = typer.Option(False, "--debug", "-d", show_default=False),
-    fast: bool = typer.Option(False, "--fast", "-f", show_default=False),
-    list_clicks: bool = typer.Option(
+    debug: bool = typer.Option(False, "--debug", "-d", show_default=False),  # noqa
+    fast: bool = typer.Option(False, "--fast", "-f", show_default=False),  # noqa
+    list_clicks: bool = typer.Option(  # noqa
         False,
         "--list",
         "-l",
         help="Print a list of all available clicker types.",
         show_default=False,
     ),
-    click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),
+    click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),  # noqa
 ):
     """Clickpy, Automated mouse clicking with python."""
     try:
