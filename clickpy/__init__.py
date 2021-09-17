@@ -22,7 +22,7 @@ def main(
         False,
         "--list",
         "-l",
-        help="Print a list of all available clicking strategies.",
+        help="Print a list of all available clicker types.",
         show_default=False,
     ),
     click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),

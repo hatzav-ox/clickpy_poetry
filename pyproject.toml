@@ -28,6 +28,7 @@ flake8 = "^3.9.2"
 mypy = "^0.910"
 pytest-sugar = "^0.9.4"
 typer-cli = "^0.0.12"
+flake8-bugbear = "^21.9.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -35,6 +36,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 clickpy = "clickpy:run"
+test = "test:run"
 tests = "tests:run"
 cov = "tests:coverage"
 
