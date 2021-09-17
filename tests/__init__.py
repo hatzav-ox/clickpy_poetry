@@ -1,28 +1,37 @@
-# noqa
-# add the above comment to ignore pydocstyle
+"""Methods to run from poetry scripts."""
+
 import os
+import subprocess
+from typing import Optional
 
 
 def run():
     """Run pytest from poetry script."""
-    chdir_to_git_root()
+    if path := chdir_to_git_root():
+        print(f"Changing cwd to : {path}")
+
     os.system("pytest tests/ -v --cov=clickpy/")
 
 
-def chdir_to_git_root():
-    og_dir = path = os.getcwd()
-    while True:
-        parent = os.path.dirname(path)
-        os.chdir(parent)
-        if os.system("git rev-parse --is-inside-work-tree >/dev/null 2>&1") == 0:
-            path = parent
-            continue
+def chdir_to_git_root() -> Optional[str]:
+    """Change cwd to git repo root folder."""
+    og_dir = os.getcwd()
+    y = subprocess.Popen(
+        ["git", "rev-parse", "--show-toplevel"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
+    stdout, stderr = y.communicate()
+    if stderr:
+        print(stderr)
+        raise SystemExit(1)
 
-        os.chdir(path)
-        break
+    git_parent = bytes.decode(stdout).strip()
+    os.chdir(git_parent)
 
-    if path != og_dir:
-        print(f"Changed current working directory to: {path}")
+    return git_parent if git_parent != og_dir else None
+    #     print(f"Changed current working directory to: {git_parent}")
+    #     return git_parent
+    # else:
+    #     return None
 
 
 def coverage():
