@@ -10,7 +10,7 @@ def run():
     if path := chdir_to_git_root():
         print(f"Changing cwd to : {path}")
 
-    os.system("pytest tests/ -v --cov=clickpy/")
+    os.system("pytest tests/ --cov=clickpy -v")
 
 
 def chdir_to_git_root() -> Optional[str]:

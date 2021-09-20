@@ -10,8 +10,8 @@ from clickpy.click_strategy import STRATEGIES, BasicClickStrategy, ClickProtocol
 from clickpy.exception import ClickStrategyNotFound
 
 
-class SomeObj:
-    def __init__(self):
+class SomeObj:  # noqa
+    def __init__(self):  # noqa
         self.x = 0
 
 
@@ -30,7 +30,7 @@ def test_all_strats_in_STRATEGIES_dict():
     assert len(members) == len(STRATEGIES)
 
     for member in members:
-        cli_name = member[1].to_cli_string()
+        cli_name = member[1].repr()
         assert cli_name in STRATEGIES
         assert STRATEGIES[cli_name] == member[1]
 
@@ -53,14 +53,14 @@ def test_auto_click_structural_subtyping_works() -> None:  # noqa
     mock_click = MagicMock(return_value=None, name="__click__")
     setattr(some_obj, "__click__", mock_click)
     setattr(some_obj, "debug", False)
-    setattr(some_obj, "to_cli_string", MagicMock(return_value="str", name="to_cli_string"))
+    setattr(some_obj, "repr", MagicMock(return_value="str", name="to_cli_string"))
     # Act
     auto_click(some_obj)  # type: ignore
 
     # Assert
     some_obj.__click__.assert_called_once()  # type: ignore
     mock_click.assert_called_once()
-    some_obj.to_cli_string.assert_not_called()  # type: ignore
+    some_obj.repr.assert_not_called()  # type: ignore
 
 
 def test_auto_click_throws_type_error_if_arg_not_SupportsClick_subtype():  # noqa

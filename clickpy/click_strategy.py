@@ -32,11 +32,11 @@ class ClickProtocol(Protocol):
         """
 
     @classmethod
-    def to_cli_string(cls) -> str:
-        """Turn classname into a friendly, cli identifiable name.
+    def repr(cls) -> str:
+        """Return cli/user-friendly string.
 
         Returns:
-            str: cli friendly class name
+            str: simplified cli string for cli.
         """
 
 
@@ -134,9 +134,9 @@ class BasicClickStrategy:
             typer.echo("... Clicked")
 
     @classmethod
-    def to_cli_string(cls):
+    def repr(cls) -> str:
         """Return 'basic'."""
-        return cls.__name__.replace("ClickStrategy", "").lower()
+        return "basic"
 
 
 class NaturalClickStrategy:
@@ -166,12 +166,12 @@ class NaturalClickStrategy:
                 typer.echo("... Clicked")
 
     @classmethod
-    def to_cli_string(cls):
+    def repr(cls) -> str:
         """Return 'natural'."""
-        return cls.__name__.replace("ClickStrategy", "").lower()
+        return "natural"
 
 
 STRATEGIES: dict[str, type[ClickProtocol]] = {
-    BasicClickStrategy.to_cli_string(): BasicClickStrategy,
-    NaturalClickStrategy.to_cli_string(): NaturalClickStrategy,
+    BasicClickStrategy.repr(): BasicClickStrategy,
+    NaturalClickStrategy.repr(): NaturalClickStrategy,
 }
