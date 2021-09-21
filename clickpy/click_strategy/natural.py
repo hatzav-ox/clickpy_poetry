@@ -32,6 +32,6 @@ class NaturalClickStrategy:
                 typer.echo("... Clicked")
 
     @classmethod
-    def repr(cls) -> str:
+    def cli_repr(cls) -> str:
         """Return 'natural'."""
         return "natural"

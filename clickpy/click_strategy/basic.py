@@ -51,6 +51,6 @@ class BasicClickStrategy:
             typer.echo("... Clicked")
 
     @classmethod
-    def repr(cls) -> str:
+    def cli_repr(cls) -> str:
         """Return 'basic'."""
         return "basic"

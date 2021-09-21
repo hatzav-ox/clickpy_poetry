@@ -6,8 +6,15 @@ from unittest.mock import MagicMock
 
 import clickpy.click_strategy
 import pytest
-from clickpy.click_strategy import STRATEGIES, BasicClickStrategy, ClickProtocol, auto_click
+from clickpy.click_strategy import (
+    STRATEGIES,
+    BasicClickStrategy,
+    ClickProtocol,
+    auto_click,
+    click_strategy_factory,
+)
 from clickpy.exception import ClickStrategyNotFound
+from pytest import CaptureFixture
 
 
 class SomeObj:  # noqa
@@ -30,7 +37,7 @@ def test_all_strats_in_STRATEGIES_dict():
     assert len(members) == len(STRATEGIES)
 
     for member in members:
-        cli_name = member[1].repr()
+        cli_name = member[1].cli_repr()
         assert cli_name in STRATEGIES
         assert STRATEGIES[cli_name] == member[1]
 
@@ -53,14 +60,14 @@ def test_auto_click_structural_subtyping_works() -> None:  # noqa
     mock_click = MagicMock(return_value=None, name="__click__")
     setattr(some_obj, "__click__", mock_click)
     setattr(some_obj, "debug", False)
-    setattr(some_obj, "repr", MagicMock(return_value="str", name="to_cli_string"))
+    setattr(some_obj, "cli_repr", MagicMock(return_value="str", name="to_cli_string"))
     # Act
     auto_click(some_obj)  # type: ignore
 
     # Assert
     some_obj.__click__.assert_called_once()  # type: ignore
     mock_click.assert_called_once()
-    some_obj.repr.assert_not_called()  # type: ignore
+    some_obj.cli_repr.assert_not_called()  # type: ignore
 
 
 def test_auto_click_throws_type_error_if_arg_not_SupportsClick_subtype():  # noqa
@@ -73,3 +80,47 @@ def test_auto_click_throws_type_error_if_arg_not_SupportsClick_subtype():  # noq
         excinfo.value.args[0] == f"Argument passed in does not implement"
         f" {ClickProtocol.__name__}"
     )
+
+
+def test_click_strategy_factory_returns_BasicClickStrategy():
+    basic = click_strategy_factory()
+
+    assert isinstance(basic, BasicClickStrategy)
+    assert isinstance(basic, ClickProtocol)
+    assert basic.debug == False
+    assert basic.sleep_time is None
+
+
+def test_click_strategy_factory_with_debug_flag_and_defaults(capsys: CaptureFixture):
+    basic = click_strategy_factory(debug=True)
+    out, err = capsys.readouterr()
+
+    assert basic.debug
+    assert out == "click_type passed into factory func: None\n"
+
+
+funky_types = ["    basic", "BASIC", " Basic ", "  bAsIc     ", "Natural", "   natural   "]
+
+
+@pytest.mark.parametrize("types", funky_types)
+def test_click_strategy_factory_sanitizes_clik_type_param(types: str, capsys: CaptureFixture):
+    clicker = click_strategy_factory(types, debug=True)
+
+    out, _ = capsys.readouterr()
+
+    assert isinstance(clicker, ClickProtocol)
+    assert (
+        out
+        == f"""click_type passed into factory func: {types!r}
+sanitized click_type={types.strip().lower()!r}
+"""
+    )
+
+
+bad_types = ["", "    ", "notatype", "SomThINGeLsE"]
+
+
+@pytest.mark.parametrize("types", bad_types)
+def test_empty_str_or_no_existing_type_string_throws_error(types: str):
+    with pytest.raises(ClickStrategyNotFound):
+        click_strategy_factory(click_type=types)

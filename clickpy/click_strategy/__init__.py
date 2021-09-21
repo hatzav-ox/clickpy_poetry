@@ -31,7 +31,7 @@ class ClickProtocol(Protocol):
         """
 
     @classmethod
-    def repr(cls) -> str:
+    def cli_repr(cls) -> str:
         """Return cli/user-friendly string.
 
         Returns:
@@ -40,8 +40,8 @@ class ClickProtocol(Protocol):
 
 
 STRATEGIES: dict[str, type[ClickProtocol]] = {
-    BasicClickStrategy.repr(): BasicClickStrategy,
-    NaturalClickStrategy.repr(): NaturalClickStrategy,
+    BasicClickStrategy.cli_repr(): BasicClickStrategy,
+    NaturalClickStrategy.cli_repr(): NaturalClickStrategy,
 }
 
 
@@ -74,19 +74,23 @@ def click_strategy_factory(
         SupportsClick: ClickStrategy object that implements SupportsClick protocol.
     """
     if debug:
-        typer.echo(f"{click_type=}")
+        typer.echo(f"click_type passed into factory func: {click_type!r}")
         if fast:
             pass
             # typer.echo(
             #     f"fast_click flag passed in. default sleep time set to {sleep_time}s, "
             #     "instead of a random interval."
             # )
-    # using this syntax, instead of not click_type, beacuse users can enter an empty string
-    # empty strings should throw an Exception
+
+    # this is the base case, nothing passed in for click_type.
+    # empty string should throw exception
     if click_type is None:
         return BasicClickStrategy(debug=debug, fast=fast)
 
     cleaned_type = click_type.strip().lower()
+    if debug:
+        typer.echo(f"sanitized click_type={cleaned_type!r}")
+
     try:
         return STRATEGIES[cleaned_type](debug=debug, fast=fast)  # type: ignore
     except KeyError:

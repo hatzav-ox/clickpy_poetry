@@ -51,7 +51,7 @@ def main(
         message = (
             "Running clickpy. Enter ctrl+c to stop."
             if not debug
-            else f"Using clicker type: {click_strategy.repr()}"
+            else f"Using clicker type: {click_strategy.cli_repr()}"
         )
         typer.echo(message)
 
