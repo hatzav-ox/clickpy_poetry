@@ -1,8 +1,13 @@
+"""
+The first clicker I created.
+
+Gets a random time between 1 second and 3 minutes (in seconds).
+"""
 from random import randint
 from time import sleep
 
-import pyautogui
 import typer
+from pyautogui import click
 
 
 class BasicClickStrategy:
@@ -44,8 +49,7 @@ class BasicClickStrategy:
             typer.echo("Thread sleeping now...")
 
         sleep(timer)
-
-        pyautogui.click()
+        click()
 
         if self.debug:
             typer.echo("... Clicked")

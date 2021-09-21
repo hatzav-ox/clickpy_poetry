@@ -1,8 +1,8 @@
 from random import randint
 from time import sleep
 
-import pyautogui
 import typer
+from pyautogui import click
 
 
 class NaturalClickStrategy:
@@ -26,8 +26,10 @@ class NaturalClickStrategy:
         for time in self.wait_times:
             if self.debug:
                 typer.echo(f"Waiting for {time} sec ...")
+
             sleep(time)
-            pyautogui.click()
+            click()
+
             if self.debug:
                 typer.echo("... Clicked")
 

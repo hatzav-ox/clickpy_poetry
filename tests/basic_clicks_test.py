@@ -12,7 +12,7 @@ def test_BasicClickStrategy_is_SupportsClick():  # noqa
 def test_BasicClickStrategy_sets_fast_sleep_time(mocker: MockerFixture):  # noqa
     # Arrange
     mock_sleep = mocker.patch("clickpy.click_strategy.basic.sleep")
-    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.pyautogui.click")
+    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.click")
 
     # Act
     basic_click = BasicClickStrategy(fast=True)
@@ -29,7 +29,7 @@ def test_BasicClickStrategy_uses_randint_when_sleep_time_is_none(mocker: MockerF
     sleep_time = 5
     mock_randint = mocker.patch("clickpy.click_strategy.basic.randint", return_value=sleep_time)
     mock_sleep = mocker.patch("clickpy.click_strategy.basic.sleep")
-    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.pyautogui.click")
+    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.click")
 
     # Act
     basic_click = BasicClickStrategy()
@@ -47,7 +47,7 @@ def test_BasicClickStrategy_prints_stdout_when_print_debug_is_True(
 ):  # noqa
     # Arrange
     mock_sleep = mocker.patch("clickpy.click_strategy.basic.sleep")
-    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.pyautogui.click")
+    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.click")
 
     # Act
     basic_click = BasicClickStrategy(fast=True, debug=True)
@@ -71,7 +71,7 @@ def test_BasicClickStrategy_prints_random_time_when_sleep_time_is_None(
     sleep_time = 1.0
     mock_randint = mocker.patch("clickpy.click_strategy.basic.randint", return_value=sleep_time)
     mock_sleep = mocker.patch("clickpy.click_strategy.basic.sleep")
-    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.pyautogui.click")
+    mock_gui_click = mocker.patch("clickpy.click_strategy.basic.click")
 
     # Act
     basic_click = BasicClickStrategy(debug=True)
