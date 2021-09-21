@@ -6,7 +6,7 @@ This app will randomly click your mouse between 1 second and 3 minutes, to preve
 
 The rational behind the random interval is: if the mouse contiually clicked every second or millisecond, it could easily be detected as an automated process.
 
-The random interval provides a sembalance of feasability, although the interval could be reduced and extended as needed, or move the cursor after a couple consecutive clicks. (Possibe feature feature?)
+The random interval provides a sembalance of feasability, although the interval could be reduced and extended as needed, or move the cursor after a couple consecutive clicks. (Possibe future feature?)
 
 PyAutoGUI provides a simple interface to the mouse, and Typer provides simple cli parsing. You can find out more about these libraries with the links provided above.
 
