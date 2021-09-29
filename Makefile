@@ -1,10 +1,11 @@
-# .PHONY: run
+.PHONY: run
 run:
 	poetry run clickpy
 
+.PHONY: test
 test:
-	pytest tests/ --cov=clickpy -v
+	poetry run pytest tests/ --cov=clickpy -v
 
-
+.PHONY: coverage
 coverage:
-	coverage html && open htmlcov/index.html
+	poetry run coverage html && open htmlcov/index.html
