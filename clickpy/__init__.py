@@ -4,14 +4,24 @@ from typing import Optional
 
 import typer
 
-from clickpy.click_strategy import STRATEGIES, auto_click, click_strategy_factory
+from clickpy.click_strats import (
+    BasicClickStrategy,
+    ClickStrategy,
+    NaturalClickStrategy,
+    auto_click,
+    click_factory,
+)
+
+# from clickpy.click_strategy import STRATEGIES, auto_click, click_strategy_factory
 from clickpy.exception import ClickStrategyNotFound
+
+__all__ = ["BasicClickStrategy", "NaturalClickStrategy", "auto_click", "click_factory"]
 
 
 def print_startegy_names():
     """Get simplified names of all strategies and print them to stdout."""
     typer.echo("Available click types:\n")
-    for name in STRATEGIES.keys():
+    for name in ClickStrategy.list_strat_names():
         typer.echo(name)
 
 
@@ -46,12 +56,12 @@ def main(
             print_startegy_names()
             raise typer.Exit()
 
-        click_strategy = click_strategy_factory(click_type=click_type, fast=fast, debug=debug)
+        click_strategy = click_factory(click_type=click_type, fast=fast, debug=debug)
 
         message = (
             "Running clickpy. Enter ctrl+c to stop."
             if not debug
-            else f"Using clicker type: {click_strategy.cli_repr()}"
+            else f"Using clicker type: {click_strategy.name}"
         )
         typer.echo(message)
 
