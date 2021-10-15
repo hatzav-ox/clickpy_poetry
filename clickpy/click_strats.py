@@ -10,41 +10,53 @@ from clickpy.exception import ClickStrategyNotFound
 
 
 class ClickStrategy:
-    # name: str
-    _strat_type = {}
+    """Super Factory Pattern."""
+
+    _click_types = {}
 
     def __init_subclass__(cls, name: str):
-        cls._strat_type[name] = cls
+        """This will be called when a class inherits from this class.
 
-    def __new__(cls, name: str, **kwargs):
+        ie `class Something(ClickStrategy):` <- this line
+        """
+        cls._click_types[name] = cls
+
+    def __new__(cls, name: str, **_):
+        """This actually creates the object.
+
+        `__init__()` sets up the object.
+        """
         try:
-            subclass = cls._strat_type[name]
+            subclass = cls._click_types[name]
             obj = object.__new__(subclass)
             obj.name = name
             return obj
         except KeyError:
             raise ClickStrategyNotFound()
 
+    def click(self):
+        """Poor man's excuse for a 'Protocol' method (without actually using Protocols)."""
+        raise NotImplementedError()
+
     @classmethod
     def new(cls, click_name: Optional[str], **kwargs):
+        """Create strategy using Factory pattern."""
         if click_name is None:
             return ClickStrategy(name="basic", **kwargs)
 
-        cleaned_name = click_name.strip().lower()
+        name = click_name.strip().lower()
         if kwargs.get("debug"):
-            typer.echo(f"sanitized click_name: {cleaned_name!r}")
+            typer.echo(f"sanitized click_name: {name!r}")
 
         try:
-            return ClickStrategy(name=cleaned_name, **kwargs)
+            return ClickStrategy(name=name, **kwargs)
         except ClickStrategyNotFound:
             raise
 
     @classmethod
     def list_strat_names(cls):
-        return list(map(lambda c: c, cls._strat_type.keys()))
-
-    def click(self):
-        ...
+        """Get list of available click strategies."""
+        return list(map(lambda c: c, cls._click_types.keys()))
 
 
 class BasicClickStrategy(ClickStrategy, name="basic"):  # this line will trigger __init_subclass__
@@ -59,8 +71,8 @@ class BasicClickStrategy(ClickStrategy, name="basic"):  # this line will trigger
         """Init fields."""
         self.debug = kwargs.get("debug")
         self.fast = kwargs.get("fast")
-        self._min_sleep_bound: int = 1
-        self._max_sleep_bound: int = 180
+        self.min_bound: int = 1
+        self.max_bound: int = 180
 
     def click(self) -> None:
         """
@@ -73,7 +85,7 @@ class BasicClickStrategy(ClickStrategy, name="basic"):  # this line will trigger
         3. call pyautogui.click()
         Optional: print statements if print_debug = True.
         """
-        timer = 0.5 if self.fast else float(randint(self._min_sleep_bound, self._max_sleep_bound))
+        timer = 0.5 if self.fast else float(randint(self.min_bound, self.max_bound))
 
         if self.debug and not self.fast:
             typer.echo(f"Random thread sleep for {timer} seconds.")
@@ -94,9 +106,9 @@ class NaturalClickStrategy(ClickStrategy, name="natural"):
     def __init__(self, **kwargs):
         """Init fields."""
         self.debug = kwargs.get("debug")
-        self._min_sleep_bound = 5
-        self._max_sleep_bound = 60
-        self.wait_times = [1.0, 1.0, 2.5, randint(self._min_sleep_bound, self._max_sleep_bound)]
+        self.min_bound = 5
+        self.max_bound = 60
+        self.wait_times = [1.0, 1.0, 2.5, randint(self.min_bound, self.max_bound)]
 
     def click(self):
         """Protocol method defined by SupportsClick.

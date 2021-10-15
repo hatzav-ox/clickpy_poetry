@@ -35,10 +35,10 @@ def main(
     click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),  # noqa
 ):
     """Clickpy, Automated mouse clicking with python."""
-    message = "Running clickpy. Enter ctrl+c to stop."
+    message = "Running clickpy. Enter ctrl+c to stop.\n"
 
     if debug:
-        message += f"\nUsing clicker type: {click_type}"
+        message += f"\nUsing clicker type: {click_type}\n"
         message += f"""\nArgument list:
 {debug=}
 {fast=}
@@ -56,7 +56,7 @@ def main(
 
         click_strategy = ClickStrategy.new(click_name=click_type, fast=fast, debug=debug)
         if debug:
-            typer.echo(f"Click Strategy being used: {type(click_strategy)}")
+            typer.echo(f"\nClick Strategy being used: {type(click_strategy)}\n")
 
         while True:
             click_strategy.click()
