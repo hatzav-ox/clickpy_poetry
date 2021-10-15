@@ -4,18 +4,12 @@ from typing import Optional
 
 import typer
 
-from clickpy.click_strats import (
-    BasicClickStrategy,
-    ClickStrategy,
-    NaturalClickStrategy,
-    auto_click,
-    click_factory,
-)
+from clickpy.click_strats import BasicClickStrategy, ClickStrategy, NaturalClickStrategy
 
 # from clickpy.click_strategy import STRATEGIES, auto_click, click_strategy_factory
 from clickpy.exception import ClickStrategyNotFound
 
-__all__ = ["BasicClickStrategy", "NaturalClickStrategy", "auto_click", "click_factory"]
+__all__ = ["BasicClickStrategy", "NaturalClickStrategy"]
 
 
 def print_startegy_names():
@@ -41,32 +35,31 @@ def main(
     click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),  # noqa
 ):
     """Clickpy, Automated mouse clicking with python."""
-    try:
-        if debug:
-            typer.echo(
-                f"""Argument list:
+    message = "Running clickpy. Enter ctrl+c to stop."
+
+    if debug:
+        message += f"\nUsing clicker type: {click_type}"
+        message += f"""\nArgument list:
 {debug=}
 {fast=}
 {list_clicks=}
 {click_type=}
 """
-            )
+
+    typer.echo(message)
+
+    try:
 
         if list_clicks:
             print_startegy_names()
             raise typer.Exit()
 
-        click_strategy = click_factory(click_type=click_type, fast=fast, debug=debug)
-
-        message = (
-            "Running clickpy. Enter ctrl+c to stop."
-            if not debug
-            else f"Using clicker type: {click_strategy.name}"
-        )
-        typer.echo(message)
+        click_strategy = ClickStrategy.new(click_name=click_type, fast=fast, debug=debug)
+        if debug:
+            typer.echo(f"Click Strategy being used: {type(click_strategy)}")
 
         while True:
-            auto_click(click_strategy)
+            click_strategy.click()
 
     except ClickStrategyNotFound:
         typer.echo(f"Argument {click_type!r} is not a valid clicker type.")
