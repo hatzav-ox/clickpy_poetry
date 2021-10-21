@@ -4,14 +4,18 @@ from typing import Optional
 
 import typer
 
-from clickpy.click_strategy import STRATEGIES, auto_click, click_strategy_factory
 from clickpy.exception import ClickStrategyNotFound
+from clickpy.strategy import BasicClickStrategy, ClickStrategy, NaturalClickStrategy
+
+# TODO: review tests for everything
+
+__all__ = ["BasicClickStrategy", "NaturalClickStrategy", "ClickStrategyNotFound"]
 
 
 def print_startegy_names():
     """Get simplified names of all strategies and print them to stdout."""
     typer.echo("Available click types:\n")
-    for name in STRATEGIES.keys():
+    for name in ClickStrategy.list_strat_names():
         typer.echo(name)
 
 
@@ -31,41 +35,42 @@ def main(
     click_type: Optional[str] = typer.Option(None, "--type", "-t", show_default=False),  # noqa
 ):
     """Clickpy, Automated mouse clicking with python."""
-    try:
-        if debug:
-            typer.echo(
-                f"""Argument list:
+    message = "Running clickpy. Enter ctrl+c to stop.\n"
+    if debug:
+        message += f"\nUsing clicker type: {click_type}\n"
+        message += f"""\nArgument list:
 {debug=}
 {fast=}
 {list_clicks=}
 {click_type=}
 """
-            )
 
-        if list_clicks:
-            print_startegy_names()
-            raise typer.Exit()
+    typer.echo(message)
 
-        click_strategy = click_strategy_factory(click_type=click_type, fast=fast, debug=debug)
+    exit_code = 0
+    if list_clicks:
+        print_startegy_names()
+        typer.Exit(exit_code)
 
-        message = (
-            "Running clickpy. Enter ctrl+c to stop."
-            if not debug
-            else f"Using clicker type: {click_strategy.cli_repr()}"
-        )
-        typer.echo(message)
+    try:
+        click_strategy = ClickStrategy.new(click_name=click_type, fast=fast, debug=debug)
+        if debug:
+            typer.echo(f"\nClick Strategy being used: {type(click_strategy)}\n")
 
         while True:
-            auto_click(click_strategy)
+            click_strategy.click()
 
     except ClickStrategyNotFound:
         typer.echo(f"Argument {click_type!r} is not a valid clicker type.")
         print_startegy_names()
-        raise typer.Exit(code=1)
+        exit_code = 1
 
     except KeyboardInterrupt:
-        msg = "KeyboardInterrupt thrown and caught. Exiting script." if debug else "Back to work!"
-        typer.echo(f"\n{msg}")
+        if debug:
+            typer.echo("KeyboardInterrupt thrown and caught. Exiting script.")
+
+    typer.echo("~~ Peace, out ~~")
+    raise typer.Exit(code=exit_code)
 
 
 def run():
