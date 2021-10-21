@@ -15,31 +15,32 @@ class ClickStrategy:
     _click_types = {}
 
     def __init_subclass__(cls, name: str):
-        """This will be called when a class inherits from this class.
+        """This will be called when another class inherits from ClickStrategy.
 
         ie `class Something(ClickStrategy):` <- this line
         """
         cls._click_types[name] = cls
 
     def __new__(cls, name: str, **_):
-        """This actually creates the object.
+        """This dunder method actually creates the object.
 
         `__init__()` sets up the object.
         """
         try:
             subclass = cls._click_types[name]
-            obj = object.__new__(subclass)
-            obj.name = name
-            return obj
         except KeyError:
             raise ClickStrategyNotFound()
+
+        obj = object.__new__(subclass)
+        obj.name = name
+        return obj
 
     def click(self):
         """Poor man's excuse for a 'Protocol' method (without actually using Protocols)."""
         raise NotImplementedError()
 
-    @classmethod
-    def new(cls, click_name: Optional[str], **kwargs):
+    @staticmethod
+    def new(click_name: Optional[str], **kwargs):
         """Create strategy using Factory pattern."""
         if click_name is None:
             return ClickStrategy(name="basic", **kwargs)
