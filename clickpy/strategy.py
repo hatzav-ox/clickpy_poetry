@@ -1,4 +1,5 @@
 """Click Strategy implementation using __init__subclass pattern."""
+from enum import Enum
 from random import randint
 from time import sleep
 from typing import Optional
@@ -9,30 +10,34 @@ import typer
 from clickpy.exception import ClickStrategyNotFound
 
 
+class StrategyType(str, Enum):
+    BASIC = "basic"
+    NATURAL = "natural"
+
+
 class ClickStrategy:
     """Super Factory Pattern."""
 
     _click_types = {}
 
-    def __init_subclass__(cls, name: str):
+    def __init_subclass__(cls, strat_type: StrategyType):
         """This will be called when another class inherits from ClickStrategy.
 
         ie `class Something(ClickStrategy):` <- this line
         """
-        cls._click_types[name] = cls
+        cls._click_types[strat_type] = cls
 
-    def __new__(cls, name: str, **_):
+    def __new__(cls, strat_type: StrategyType, **_):
         """This dunder method actually creates the object.
 
         `__init__()` sets up the object.
         """
         try:
-            subclass = cls._click_types[name]
+            subclass = cls._click_types[strat_type]
         except KeyError:
             raise ClickStrategyNotFound()
 
         obj = object.__new__(subclass)
-        obj.name = name
         return obj
 
     def click(self):
@@ -57,10 +62,12 @@ class ClickStrategy:
     @classmethod
     def list_strat_names(cls):
         """Get list of available click strategies."""
-        return list(map(lambda c: c, cls._click_types.keys()))
+        return list(cls._click_types.keys())
 
 
-class BasicClickStrategy(ClickStrategy, name="basic"):  # this line will trigger __init_subclass__
+class BasicClickStrategy(
+    ClickStrategy, strat_type=StrategyType.BASIC
+):  # this line will trigger __init_subclass__
     """The first, very basic clicking strategy I came up with.
 
     Before clicking, __click__ will tell the current thread to sleep.
@@ -101,7 +108,7 @@ class BasicClickStrategy(ClickStrategy, name="basic"):  # this line will trigger
             typer.echo("... Clicked")
 
 
-class NaturalClickStrategy(ClickStrategy, name="natural"):
+class NaturalClickStrategy(ClickStrategy, strat_type=StrategyType.NATURAL):
     """Click Strategy to replicate a more natural clicking pattern."""
 
     def __init__(self, **kwargs):

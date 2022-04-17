@@ -5,14 +5,10 @@ from typing import Optional
 import typer
 
 from clickpy.exception import ClickStrategyNotFound
-from clickpy.strategy import BasicClickStrategy, ClickStrategy, NaturalClickStrategy
-
-# TODO: review tests for everything
-
-__all__ = ["BasicClickStrategy", "NaturalClickStrategy", "ClickStrategyNotFound"]
+from clickpy.strategy import ClickStrategy
 
 
-def print_startegy_names():
+def print_startegy_names() -> None:
     """Get simplified names of all strategies and print them to stdout."""
     typer.echo("Available click types:\n")
     for name in ClickStrategy.list_strat_names():
@@ -73,6 +69,7 @@ def main(
     raise typer.Exit(code=exit_code)
 
 
-def run():
+def run() -> int:
     """Run clickpy cli with typer."""
-    typer.run(main)  # pragma: no cover
+    result = typer.run(main)  # pragma: no cover
+    return result or 0
