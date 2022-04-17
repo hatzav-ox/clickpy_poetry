@@ -6,7 +6,7 @@ from pytest_mock import MockerFixture
 
 def test_NaturalClickStrategy_is_ClickProtocol():
     """Make sure NaturalClickStrategy implements ClickProtocol."""
-    assert isinstance(NaturalClickStrategy(), ClickStrategy)
+    assert isinstance(NaturalClickStrategy(), ClickStrategy)  # type: ignore
 
 
 def test_NaturalClickStrategy_works(mocker: MockerFixture):

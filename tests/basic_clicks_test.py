@@ -17,7 +17,7 @@ def test_BasicClickStrategy_sets_fast_sleep_time(mocker: MockerFixture):  # noqa
 
     # Act
     basic_click = BasicClickStrategy(fast=True)
-    basic_click.__click__()
+    basic_click.click()
 
     # Assert
     assert basic_click.sleep_time == 0.5
@@ -76,7 +76,7 @@ def test_BasicClickStrategy_prints_random_time_when_sleep_time_is_None(
 
     # Act
     basic_click = BasicClickStrategy(debug=True)
-    basic_click.__click__()
+    basic_click.click()
 
     out, err = capsys.readouterr()
 
@@ -91,7 +91,3 @@ def test_BasicClickStrategy_prints_random_time_when_sleep_time_is_None(
     mock_randint.assert_called_once_with(basic_click._min_sleep_bound, basic_click._max_sleep_bound)
     mock_sleep.assert_called_once_with(sleep_time)
     mock_gui_click.assert_called_once()
-
-
-def test_repr_returns_basic():  # noqa
-    assert BasicClickStrategy.cli_repr() == "basic"
