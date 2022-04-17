@@ -1,11 +1,12 @@
-from clickpy.click_strategy import ClickProtocol, NaturalClickStrategy
+from clickpy import NaturalClickStrategy
+from clickpy.strategy import ClickStrategy
 from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 
 
 def test_NaturalClickStrategy_is_ClickProtocol():
     """Make sure NaturalClickStrategy implements ClickProtocol."""
-    assert isinstance(NaturalClickStrategy(), ClickProtocol)
+    assert isinstance(NaturalClickStrategy(), ClickStrategy)
 
 
 def test_NaturalClickStrategy_works(mocker: MockerFixture):

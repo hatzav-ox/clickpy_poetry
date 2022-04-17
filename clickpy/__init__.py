@@ -5,7 +5,9 @@ from typing import Optional
 import typer
 
 from clickpy.exception import ClickStrategyNotFound
-from clickpy.strategy import ClickStrategy
+from clickpy.strategy import BasicClickStrategy, ClickStrategy, NaturalClickStrategy
+
+__all__ = ["BasicClickStrategy", "NaturalClickStrategy"]
 
 
 def print_startegy_names() -> None:

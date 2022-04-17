@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import clickpy
 import typer
-from clickpy.click_strategy import BasicClickStrategy
+from clickpy import BasicClickStrategy
 from clickpy.exception import ClickStrategyNotFound
 from pytest_mock import MockerFixture
 from typer.testing import CliRunner

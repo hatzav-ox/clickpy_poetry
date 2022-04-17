@@ -1,12 +1,13 @@
 # noqa
 
-from clickpy.click_strategy import BasicClickStrategy, ClickProtocol
+from clickpy import BasicClickStrategy
+from clickpy.strategy import ClickStrategy
 from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 
 
 def test_BasicClickStrategy_is_SupportsClick():  # noqa
-    assert isinstance(BasicClickStrategy(), ClickProtocol)
+    assert isinstance(BasicClickStrategy(), ClickStrategy)
 
 
 def test_BasicClickStrategy_sets_fast_sleep_time(mocker: MockerFixture):  # noqa
