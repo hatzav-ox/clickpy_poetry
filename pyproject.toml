@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clickpy"
-version = "0.9.0"
+version = "0.10.0"
 description = "Automated mouse clicking script"
 authors = ["fitzypop <fitzypop@pm.me>"]
 license = "MIT"
