@@ -102,3 +102,7 @@ def main(
 
     typer.echo("\n~~ Peace, out ~~")
     raise typer.Exit(code=exit_code)
+
+
+def cli():  # pragma: no cover
+    raise SystemExit(typer.run(main))
