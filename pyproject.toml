@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clickpy"
-version = "0.11.1"
+version = "0.11.2"
 description = "Automated mouse clicking script"
 authors = ["fitzypop <fitzypop@pm.me>"]
 license = "MIT"
@@ -37,4 +37,4 @@ build-backend = "poetry.core.masonry.api"
 line-length = 100
 
 [tool.poetry.scripts]
-clickpy = "clickpy:run"
+clickpy = "clickpy:cli"
