@@ -12,7 +12,7 @@ exclude = [".vscode/settings.json"]
 "Bug Tracker" = "https://github.com/fitzypop/clickpy/issues"
 
 [tool.poetry.dependencies]
-python = "^3.6.11"
+python = "^3.7"
 typer = "^0.4.1"
 PyAutoGUI = "^0.9.53"
 
@@ -23,18 +23,16 @@ pytest-mock = "^3.6.1"
 pytest-cov = "^2.12.1"
 coverage = "^5.5"
 tox = "^3.24.1"
-pydocstyle = "^6.1.1"
-flake8 = "^3.9.2"
 mypy = "^0.910"
 pytest-sugar = "^0.9.4"
-flake8-bugbear = "^21.9.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.237"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 100
 
 [tool.poetry.scripts]
 clickpy = "clickpy:cli"

@@ -85,7 +85,9 @@ def main(
 
     exit_code = 0
     try:
-        click_strategy = generate_click_strategy(click_type=click_type, debug=debug, fast=fast)
+        click_strategy = generate_click_strategy(
+            click_type=click_type, debug=debug, fast=fast
+        )
         if debug:
             typer.echo(f"\nClick Strategy being used: {type(click_strategy)}\n")
 

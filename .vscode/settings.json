@@ -3,9 +3,12 @@
     "python.testing.pytestArgs": [
         "tests"
     ],
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+            "source.fixAll": true
+        }
+    },
     "python.formatting.provider": "black",
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
-    // "python.linting.pydocstyleEnabled": true
-
 }

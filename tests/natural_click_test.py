@@ -1,7 +1,8 @@
-from clickpy import NaturalClickStrategy
-from clickpy.strategy import ClickStrategy
 from pytest import CaptureFixture
 from pytest_mock import MockerFixture
+
+from clickpy import NaturalClickStrategy
+from clickpy.strategy import ClickStrategy
 
 
 def test_NaturalClickStrategy_is_ClickProtocol():
@@ -13,7 +14,7 @@ def test_NaturalClickStrategy_works(mocker: MockerFixture):
     """Make sure __click__() method is working as planned."""
     num = 1.0
     mock_sleep = mocker.patch("clickpy.click_strategy.natural.sleep")
-    mock_randit = mocker.patch("clickpy.click_strategy.natural.randint", return_values=num)
+    mocker.patch("clickpy.click_strategy.natural.randint", return_values=num)
     mock_clicker = mocker.patch("clickpy.click_strategy.natural.click")
 
     natural = NaturalClickStrategy()
@@ -29,7 +30,7 @@ def test_click_method_with_debug_flag(mocker: MockerFixture, capsys: CaptureFixt
     """Make sure debug statements are correct."""
     num = 1.0
     mock_sleep = mocker.patch("clickpy.click_strategy.natural.sleep")
-    mock_randit = mocker.patch("clickpy.click_strategy.natural.randint", return_values=num)
+    mocker.patch("clickpy.click_strategy.natural.randint", return_values=num)
     mock_clicker = mocker.patch("clickpy.click_strategy.natural.click")
 
     natural = NaturalClickStrategy(debug=True)
